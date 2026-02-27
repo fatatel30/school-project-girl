@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>شهادة تقدير</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Tahoma;
+background: linear-gradient(180deg,#5b2ca0,#2d3f8f);
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+}
+
+/* كارت الشهادة */
+.certificate{
+width:90%;
+max-width:420px;
+background:#f3e6b3;
+border:4px solid #f4b400;
+border-radius:20px;
+padding:25px;
+text-align:center;
+color:#4a2c82;
+}
+
+.icon{
+font-size:45px;
+}
+
+h1{
+margin:10px 0;
+}
+
+.line{
+height:3px;
+background:#f4b400;
+width:60%;
+margin:12px auto;
+}
+
+.name{
+font-size:22px;
+font-weight:bold;
+margin:15px 0;
+}
+
+.quote{
+background:#efe1a1;
+padding:12px;
+border-radius:12px;
+margin-top:15px;
+font-weight:bold;
+}
+
+.footer{
+display:flex;
+justify-content:space-between;
+margin-top:25px;
+font-size:15px;
+}
+
+.footer strong{
+font-weight:bold;
+color:#4a2c82;
+}
+
+/* أزرار التنقل */
+.nav-buttons{
+width:90%;
+max-width:420px;
+display:flex;
+justify-content:space-between;
+margin-top:20px;
+}
+
+button{
+padding:12px 22px;
+border:none;
+border-radius:25px;
+font-size:15px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.next{
+background:#f4b400;
+}
+
+.prev{
+background:#9c27b0;
+color:#fff;
+}
+
+button:active{
+transform:scale(0.95);
+box-shadow:0 0 12px #fff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="certificate">
+
+<div class="icon">🏆</div>
+
+<h1>شهادة تقدير</h1>
+
+<div class="line"></div>
+
+<p>تقدم إدارة المدرسة بخالص الشكر لأسرة الطالبة</p>
+
+<div class="name" id="studentDisplay"></div>
+
+<div class="line"></div>
+
+<p>
+على دعمها المتميز لابنتها في مبادرة الانضباط الرمضاني
+</p>
+
+<div class="quote">
+<strong>"خيرُ ما يُورِثُ الآباءُ أبناءَهم الأدبُ الحسن"</strong>
+</div>
+
+<div class="footer">
+<div>
+<strong>المعلمة</strong><br>
+<strong>أمل السهلي</strong>
+</div>
+
+<div>
+<strong>المديرة</strong><br>
+<strong>سمية القناص</strong>
+</div>
+</div>
+
+</div>
+
+<div class="nav-buttons">
+<button class="prev" onclick="goPrev()">السابق</button>
+<button class="next" onclick="goNext()">التالي</button>
+</div>
+
+<script>
+
+/* جلب الاسم من صفحة login */
+var studentName = localStorage.getItem("studentName");
+
+if(studentName){
+document.getElementById("studentDisplay").innerText = studentName;
+}else{
+document.getElementById("studentDisplay").innerText = "اسم الطالبة";
+}
+
+function goNext(){
+window.location.href="documentational.html";
+}
+
+function goPrev(){
+window.location.href="parents.html";
+}
+
+</script>
+
+</body>
+</html>

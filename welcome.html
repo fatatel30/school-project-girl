@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أهلاً بكِ</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Cairo', sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(180deg,#4b0082,#2e2a8f);
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding-top:70px;
+    color:white;
+}
+
+.container{
+    width:90%;
+    max-width:420px;
+    text-align:center;
+}
+
+.moon{
+    font-size:50px;
+    margin-bottom:10px;
+    animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+    0%{transform:translateY(0);}
+    50%{transform:translateY(-8px);}
+    100%{transform:translateY(0);}
+}
+
+h1{
+    color:#ffd700;
+    font-size:24px;
+    margin-bottom:8px;
+}
+
+.subtitle{
+    font-size:14px;
+    opacity:0.9;
+    margin-bottom:30px;
+}
+
+.card{
+    background:rgba(255,255,255,0.08);
+    padding:18px;
+    border-radius:20px;
+    margin-bottom:20px;
+}
+
+.wisdom{
+    background:rgba(255,215,0,0.15);
+    border:1px solid #ffd700;
+    padding:18px;
+    border-radius:18px;
+    margin-bottom:30px;
+}
+
+.wisdom small{
+    display:block;
+    margin-bottom:6px;
+    color:#ffd700;
+}
+
+button{
+    width:45%;
+    padding:12px;
+    border:none;
+    border-radius:25px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.next-btn{
+    background:#facc15;
+    color:#4b0082;
+}
+
+.logout-btn{
+    background:#dc2626;
+    color:white;
+}
+
+.buttons{
+    display:flex;
+    justify-content:space-between;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="moon">🌙</div>
+
+    <h1 id="welcomeText"></h1>
+
+    <div class="subtitle">
+        ✨ في رمضان، كل دقيقة لها قيمة
+    </div>
+
+    <div class="card">
+        الوقت نعمة من الله، فلنحافظ عليها بالحضور المبكر والانضباط الجميل
+    </div>
+
+    <div class="wisdom">
+        <small>⭐ حكمة رمضانية</small>
+        "من فرّط في الوقت فقد فرّط في نفسه"
+    </div>
+
+    <div class="buttons">
+        <!-- زر التالي مباشر -->
+        <button class="next-btn"
+        onclick="window.location.href='intintion.html'">
+        التالي
+        </button>
+
+        <!-- تسجيل الخروج -->
+        <button class="logout-btn"
+        onclick="logout()">
+        تسجيل خروج
+        </button>
+    </div>
+
+</div>
+
+<script>
+
+// جلب اسم الطالبة
+let current = localStorage.getItem("currentStudent");
+
+// عرض الترحيب
+if(current){
+    document.getElementById("welcomeText").innerHTML =
+        "أهلاً بكِ يا " + current;
+}else{
+    document.getElementById("welcomeText").innerHTML =
+        "أهلاً بكِ 🌙";
+}
+
+// تسجيل الخروج
+function logout(){
+    localStorage.removeItem("currentStudent");
+    window.location.href = "index.html";
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إحصائيات</title>
+
+<style>
+body{
+margin:0;
+font-family:Tahoma;
+background:linear-gradient(135deg,#5f1eb6,#1f3c88);
+color:white;
+text-align:center;
+font-weight:bold;
+}
+
+.container{padding:20px;}
+
+h1{color:#ffd700;}
+
+.subtitle{color:#ddd;margin-bottom:25px;}
+
+.cards{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+}
+
+.card{
+padding:20px;
+border-radius:20px;
+background:rgba(255,255,255,0.1);
+}
+
+.card:nth-child(1){background:linear-gradient(135deg,#4e2db5,#6b42d8);}
+.card:nth-child(2){background:linear-gradient(135deg,#2f4f7f,#3d6fa3);}
+.card:nth-child(3){background:linear-gradient(135deg,#6a2db5,#8a42d8);}
+.card:nth-child(4){background:linear-gradient(135deg,#6a4f7f,#8a6fa3);}
+
+.number{
+font-size:28px;
+margin:10px 0;
+}
+
+.progress-box{
+background:rgba(255,255,255,0.1);
+padding:20px;
+border-radius:20px;
+margin-top:20px;
+}
+
+.scale{
+display:flex;
+justify-content:space-between;
+font-size:12px;
+margin-bottom:5px;
+}
+
+.progress{
+height:15px;
+background:#f6b100;
+border-radius:20px;
+width:0%;
+transition:1s;
+}
+
+.badges{
+background:rgba(255,255,255,0.1);
+padding:20px;
+border-radius:20px;
+margin-top:20px;
+}
+
+.badges span{
+font-size:28px;
+margin:0 5px;
+display:none;
+}
+
+.buttons{
+margin-top:30px;
+display:flex;
+justify-content:space-between;
+}
+
+.next{
+background:#f6b100;
+padding:10px 25px;
+border-radius:25px;
+color:black;
+text-decoration:none;
+}
+
+.prev{
+background:#b042d8;
+padding:10px 25px;
+border-radius:25px;
+color:white;
+text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>📊 إحصائيات</h1>
+<div class="subtitle">تابعي تقدمك في الانضباط</div>
+
+<h2>مرحباً يا <span id="studentDisplay"></span> 👋</h2>
+
+<div class="cards">
+
+<div class="card">
+⭐
+<div class="number" id="early">0</div>
+حضور مبكر
+</div>
+
+<div class="card">
+✅
+<div class="number" id="present">0</div>
+يوم حضور
+</div>
+
+<div class="card">
+🥇
+<div class="number" id="badgeCount">0</div>
+شارات محققة
+</div>
+
+<div class="card">
+📅
+<div class="number" id="streak">0</div>
+أيام متتالية
+</div>
+
+</div>
+
+<div class="progress-box">
+
+<div class="scale">
+<span>0%</span><span>10%</span><span>20%</span>
+<span>30%</span><span>40%</span><span>50%</span>
+<span>60%</span><span>70%</span><span>80%</span>
+<span>90%</span><span>100%</span>
+</div>
+
+<div class="progress" id="progressBar"></div>
+
+</div>
+
+<div class="badges">
+<h3>🎖️ شاراتي</h3>
+
+<span id="badge1">🏆</span>
+<span id="badge2">🌅</span>
+<span id="badge3">👑</span>
+<span id="badge4">⭐</span>
+
+</div>
+
+<div class="buttons">
+<a href="parents.html" class="next">التالي</a>
+<a href="late-reason.html" class="prev">السابق</a>
+</div>
+
+</div>
+
+<script>
+
+/* ======================
+   اسم الطالبة
+====================== */
+document.getElementById("studentDisplay").innerText =
+localStorage.getItem("studentName") || "";
+
+
+/* ======================
+   بيانات attendance.html
+====================== */
+
+let present =
+parseInt(localStorage.getItem("present")) || 0;
+
+let early =
+parseInt(localStorage.getItem("early")) || 0;
+
+let late =
+parseInt(localStorage.getItem("late")) || 0;
+
+
+/* عرض الحضور */
+document.getElementById("present").innerText =
+present + early;
+
+document.getElementById("early").innerText =
+early;
+
+
+/* ======================
+   بيانات intintion.html
+====================== */
+
+let streak =
+parseInt(localStorage.getItem("streak")) || 0;
+
+let badges =
+parseInt(localStorage.getItem("badges")) || 0;
+
+document.getElementById("streak").innerText =
+streak;
+
+
+/* ======================
+   نسبة الانضباط
+====================== */
+
+let total = present + early + late;
+
+let percent = 0;
+
+if(total>0){
+percent = Math.round(
+((present + early)/total)*100
+);
+}
+
+document.getElementById("progressBar")
+.style.width = percent + "%";
+
+
+/* ======================
+   عرض الشارات
+====================== */
+
+let count=0;
+
+if(badges>=1){
+document.getElementById("badge1").style.display="inline";
+count++;
+}
+
+if(badges>=2){
+document.getElementById("badge2").style.display="inline";
+count++;
+}
+
+if(badges>=3){
+document.getElementById("badge3").style.display="inline";
+count++;
+}
+
+if(badges>=4){
+document.getElementById("badge4").style.display="inline";
+count++;
+}
+
+document.getElementById("badgeCount").innerText=count;
+
+</script>
+
+</body>
+</html>

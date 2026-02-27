@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>توثيق المبادرة</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Tahoma;
+background:linear-gradient(180deg,#5b2c91,#2e3c88);
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+color:white;
+}
+
+/* تصغير الكارت */
+.container{
+width:92%;
+max-width:380px;
+background:rgba(255,255,255,0.05);
+padding:18px;
+border-radius:18px;
+border:1px solid rgba(255,255,255,0.2);
+text-align:center;
+}
+
+/* 🌙 الهلال أصغر قليلاً */
+.icon{
+font-size:45px;
+color:#ffd54f;
+text-shadow:
+0 0 10px #ffd54f,
+0 0 20px #ffd54f,
+0 0 35px #fff176;
+margin-bottom:3px;
+animation:shine 2s infinite alternate;
+}
+
+@keyframes shine{
+from{transform:scale(1);}
+to{transform:scale(1.08);}
+}
+
+/* العنوان */
+.title{
+font-size:24px;
+font-weight:bold;
+color:#ffd54f;
+margin-bottom:12px;
+}
+
+/* المربعات */
+.box{
+background:#6a3ea1;
+padding:10px;
+border-radius:10px;
+margin:6px 0;
+font-size:14px;
+}
+
+.box small{
+display:block;
+font-weight:bold;
+font-size:16px;
+margin-bottom:3px;
+}
+
+.box b{
+color:#ffe082;
+font-size:15px;
+}
+
+/* الملاحظة */
+.note{
+background:#fff3b0;
+color:black;
+padding:10px;
+border-radius:10px;
+margin-top:8px;
+border:1px solid #caa96a;
+font-size:14px;
+font-weight:bold;
+}
+
+/* الأزرار */
+.buttons{
+display:flex;
+justify-content:space-between;
+margin-top:12px;
+}
+
+button{
+border:none;
+padding:14px 26px; /* ✅ تكبير الزر */
+border-radius:25px;
+font-size:16px;   /* ✅ خط أكبر */
+cursor:pointer;
+color:white;
+}
+
+.prev{
+background:linear-gradient(45deg,#a445b2,#d41872);
+}
+
+.next{
+background:#ffd54f;
+color:black;
+font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="icon">🌙⭐</div>
+
+<div class="title">توثيق المبادرة</div>
+
+<div class="box">
+<small>اسم المبادرة</small>
+<b>الوقت أمانة - الانضباط الرمضاني بوعي</b>
+</div>
+
+<div class="box">
+<small>تصميم المعلمة</small>
+<b>أمل السهلي</b>
+</div>
+
+<div class="box">
+<small>المدرسة</small>
+<b>المتوسطة الثانية</b>
+</div>
+
+<div class="box">
+<small>مديرة المدرسة</small>
+<b>سمية القناص</b>
+</div>
+
+<div class="box">
+<small>الفئة المستهدفة</small>
+<b>طالبات ثاني متوسط</b>
+</div>
+
+<div class="box">
+<small>مدة التنفيذ</small>
+<b>شهر رمضان المبارك</b>
+</div>
+
+<div class="note">
+غرس قيمة احترام الوقت كقيمة دينية سلوكية بأسلوب تفاعلي محفّز
+</div>
+
+<div class="buttons">
+<button class="prev" onclick="location.href='certificate.html'">السابق</button>
+<button class="next" onclick="location.href='impect.html'">التالي</button>
+</div>
+
+</div>
+
+</body>
+</html>

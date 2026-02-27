@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تقرير الأثر</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+font-family:'Cairo',sans-serif;
+background:linear-gradient(135deg,#5b21b6,#1e3a8a);
+color:white;
+text-align:center;
+}
+
+.container{
+padding:20px;
+max-width:420px;
+margin:auto;
+}
+
+h1{
+color:#ffd700;
+margin-top:10px;
+}
+
+.subtitle{
+opacity:.8;
+margin-bottom:25px;
+}
+
+.box{
+background:rgba(255,255,255,.1);
+padding:20px;
+border-radius:20px;
+margin-bottom:20px;
+text-align:right;
+}
+
+.progress-item{
+margin:15px 0;
+}
+
+.label{
+display:flex;
+justify-content:space-between;
+margin-bottom:5px;
+}
+
+.bar{
+height:14px;
+background:rgba(255,255,255,.2);
+border-radius:20px;
+overflow:hidden;
+}
+
+.fill{
+height:100%;
+border-radius:20px;
+width:0%;
+transition:1s;
+}
+
+.green{background:#22c55e;}
+.blue{background:#3b82f6;}
+.purple{background:#a855f7;}
+.yellow{background:#facc15;}
+
+.cards{
+display:flex;
+gap:15px;
+}
+
+.card{
+flex:1;
+background:rgba(255,255,255,.1);
+padding:20px;
+border-radius:20px;
+}
+
+.number{
+font-size:26px;
+font-weight:bold;
+margin-top:10px;
+}
+
+/* ✅ الأزرار بعد التعديل */
+.buttons{
+display:flex;
+justify-content:space-between;
+margin-top:25px;
+gap:40px;
+}
+
+.next{
+background:#facc15;
+color:#4b0082;
+padding:12px 25px;
+border-radius:25px;
+text-decoration:none;
+font-weight:bold;
+}
+
+.prev{
+background:#9333ea;
+color:white;
+padding:12px 25px;
+border-radius:25px;
+text-decoration:none;
+font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div style="font-size:45px;">📈</div>
+
+<h1>تقرير الأثر</h1>
+<div class="subtitle">نتائج المبادرة وتأثيرها</div>
+
+<h3 id="studentName"></h3>
+
+<div class="box">
+
+<h3>مؤشرات النجاح</h3>
+
+<div class="progress-item">
+<div class="label">
+<span>نسبة الحضور</span>
+<span id="attendancePercent">0%</span>
+</div>
+<div class="bar">
+<div class="fill green" id="attendanceBar"></div>
+</div>
+</div>
+
+<div class="progress-item">
+<div class="label">
+<span>تفاعل الطالبات</span>
+<span id="interactionPercent">0%</span>
+</div>
+<div class="bar">
+<div class="fill blue" id="interactionBar"></div>
+</div>
+</div>
+
+<div class="progress-item">
+<div class="label">
+<span>تفاعل أولياء الأمور</span>
+<span id="parentPercent">0%</span>
+</div>
+<div class="bar">
+<div class="fill purple" id="parentBar"></div>
+</div>
+</div>
+
+<div class="progress-item">
+<div class="label">
+<span>انخفاض التأخير</span>
+<span id="latePercent">0%</span>
+</div>
+<div class="bar">
+<div class="fill yellow" id="lateBar"></div>
+</div>
+</div>
+
+</div>
+
+<div class="cards">
+
+<div class="card">
+🏅
+<div class="number" id="badgesCount">0</div>
+شارات موزعة
+</div>
+
+<div class="card">
+📝
+<div class="number" id="recordsCount">0</div>
+إجمالي التسجيلات
+</div>
+
+</div>
+
+<!-- ✅ ترتيب الأزرار -->
+<div class="buttons">
+<a href="documentational.html" class="prev">السابق</a>
+<a href="dashboard.html" class="next">التالي</a>
+</div>
+
+</div>
+
+<script>
+
+let name = localStorage.getItem("currentStudent");
+
+document.getElementById("studentName")
+.innerText = name ? "مرحباً يا " + name : "مرحباً";
+
+let total =
+Number(localStorage.getItem("totalDays"));
+
+let early =
+Number(localStorage.getItem("earlyDays"));
+
+let streak =
+Number(localStorage.getItem("streak"));
+
+let badges =
+Number(localStorage.getItem("badges"));
+
+if(!name || !total){
+resetAll();
+}else{
+calculateData();
+}
+
+function calculateData(){
+
+let attendancePercent =
+Math.min(100,total*10);
+
+let interaction =
+Math.min(100,streak*15);
+
+let parentInteraction =
+Math.min(100,badges*20);
+
+let lateReduction =
+Math.min(100,early*15);
+
+setProgress("attendance",attendancePercent,true);
+setProgress("interaction",interaction,true);
+setProgress("parent",parentInteraction,true);
+setProgress("late",lateReduction,true);
+
+document.getElementById("badgesCount").innerText=badges;
+document.getElementById("recordsCount").innerText=total;
+
+}
+
+function resetAll(){
+
+setProgress("attendance",0,false);
+setProgress("interaction",0,false);
+setProgress("parent",0,false);
+setProgress("late",0,false);
+
+document.getElementById("badgesCount").innerText=0;
+document.getElementById("recordsCount").innerText=0;
+
+}
+
+function setProgress(name,value,animate){
+
+let percent=document.getElementById(name+"Percent");
+let bar=document.getElementById(name+"Bar");
+
+percent.innerText=value+"%";
+
+if(!animate){
+bar.style.transition="none";
+}
+
+bar.style.width=value+"%";
+
+}
+
+</script>
+
+</body>
+</html>

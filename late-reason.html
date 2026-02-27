@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لنتعلم معًا</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Cairo', sans-serif;
+}
+
+body{
+min-height:100vh;
+background:linear-gradient(135deg,#5b21b6,#1e3a8a);
+display:flex;
+justify-content:center;
+padding:25px 15px;
+color:white;
+}
+
+.container{
+width:100%;
+max-width:420px;
+}
+
+.header{
+text-align:center;
+margin-bottom:20px;
+}
+
+.header .emoji{
+font-size:45px;
+margin-bottom:8px;
+}
+
+.header h1{
+color:#facc15;
+font-size:22px;
+}
+
+.header p{
+font-size:14px;
+opacity:.9;
+}
+
+.note{
+background:#2c5282;
+padding:12px;
+border-radius:15px;
+text-align:center;
+margin:15px 0 25px;
+font-size:13px;
+color:#b2f5ea;
+}
+
+.section{
+background:rgba(255,255,255,.08);
+padding:18px;
+border-radius:20px;
+margin-bottom:20px;
+}
+
+.section h3{
+color:#facc15;
+margin-bottom:15px;
+font-size:16px;
+text-align:right;
+}
+
+.option{
+background:#6b21a8;
+padding:14px;
+border-radius:15px;
+margin-bottom:10px;
+display:flex;
+align-items:center;
+flex-direction:row;
+justify-content:flex-start;
+gap:8px;
+text-align:left;
+cursor:pointer;
+transition:.3s;
+}
+
+.option.active{
+background:#9333ea;
+box-shadow:0 0 15px #c084fc;
+}
+
+.radio{
+width:18px;
+height:18px;
+border-radius:50%;
+border:2px solid white;
+flex-shrink:0;
+}
+
+.option.active .radio{
+background:#facc15;
+}
+
+.save-btn{
+width:100%;
+padding:14px;
+border:none;
+border-radius:30px;
+font-size:15px;
+font-weight:bold;
+margin:15px 0;
+background:#2e7d32;
+opacity:.6;
+transition:.3s;
+color:white;
+}
+
+.save-btn.active{
+background:#00c853;
+box-shadow:0 0 15px #00ff88;
+opacity:1;
+}
+
+.nav-buttons{
+display:flex;
+justify-content:space-between;
+margin-top:10px;
+flex-direction:row-reverse;
+}
+
+.nav-buttons button{
+padding:12px 25px;
+border:none;
+border-radius:25px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.next{
+background:#facc15;
+color:#4b0082;
+}
+
+.back{
+background:#9333ea;
+color:white;
+}
+
+.success{
+position:fixed;
+top:20px;
+left:50%;
+transform:translateX(-50%);
+background:#00c853;
+padding:12px 20px;
+border-radius:25px;
+display:none;
+box-shadow:0 0 15px #00ff88;
+}
+</style>
+</head>
+
+<body>
+
+<div class="success" id="successMsg">
+تم الحفظ بنجاح 💚
+</div>
+
+<div class="container">
+
+<div class="header">
+<div class="emoji">💪</div>
+<h1>لنتعلم معًا</h1>
+<p>لا بأس.. كلنا نتعلم!</p>
+</div>
+
+<div class="note">
+💚 تقبل الاعتراف بالخطأ أول خطوة للتحسين
+</div>
+
+<div class="section" id="reasonSection">
+<h3>ما سبب التأخير؟</h3>
+
+<div class="option" onclick="selectOption(this,'reason')">
+<div class="radio"></div>
+<span>😴 سهرت متأخرة</span>
+</div>
+
+<div class="option" onclick="selectOption(this,'reason')">
+<div class="radio"></div>
+<span>⏰ لم أستيقظ للمنبه</span>
+</div>
+
+<div class="option" onclick="selectOption(this,'reason')">
+<div class="radio"></div>
+<span>👗 تأخرت في الاستعداد</span>
+</div>
+
+<div class="option" onclick="selectOption(this,'reason')">
+<div class="radio"></div>
+<span>🚗 ظروف المواصلات</span>
+</div>
+
+<div class="option" onclick="selectOption(this,'reason')">
+<div class="radio"></div>
+<span>📝 سبب آخر</span>
+</div>
+
+</div>
+
+<div class="section" id="solutionSection">
+<h3>ما الحل الذي ستتبعينه؟</h3>
+
+<div class="option" onclick="selectOption(this,'solution')">
+<div class="radio"></div>
+<span>🌙 سأنام مبكرة الليلة</span>
+</div>
+
+<div class="option" onclick="selectOption(this,'solution')">
+<div class="radio"></div>
+<span>👕 سأجهز ملابسي من الليل</span>
+</div>
+
+<div class="option" onclick="selectOption(this,'solution')">
+<div class="radio"></div>
+<span>⏰ سأضع أكثر من منبه</span>
+</div>
+
+<div class="option" onclick="selectOption(this,'solution')">
+<div class="radio"></div>
+<span>👨‍👩‍👧 سأطلب مساعدة أهلي</span>
+</div>
+
+</div>
+
+<button class="save-btn" id="saveBtn" onclick="saveData()">💾 حفظ والمتابعة</button>
+
+<div class="nav-buttons">
+<button class="next" onclick="goNext()">التالي ←</button>
+<button class="back" onclick="goBack()">→ السابق</button>
+</div>
+
+</div>
+
+<script>
+let selectedReason = null;
+let selectedSolution = null;
+
+function selectOption(element,type){
+
+if(type === "reason"){
+document.querySelectorAll("#reasonSection .option")
+.forEach(o=>o.classList.remove("active"));
+selectedReason = element.innerText;
+}
+
+if(type === "solution"){
+document.querySelectorAll("#solutionSection .option")
+.forEach(o=>o.classList.remove("active"));
+selectedSolution = element.innerText;
+}
+
+element.classList.add("active");
+
+if(selectedReason && selectedSolution){
+document.getElementById("saveBtn").classList.add("active");
+}
+}
+
+function saveData(){
+if(!(selectedReason && selectedSolution)){
+alert("اختاري سبب وحل أولاً");
+return;
+}
+
+let msg=document.getElementById("successMsg");
+msg.style.display="block";
+
+setTimeout(()=>{
+msg.style.display="none";
+goNext();
+},2000);
+}
+
+/* ✅ التالي */
+function goNext(){
+window.location.href="student-states.html";
+}
+
+/* ✅ السابق */
+function goBack(){
+window.location.href="attendance.html";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الوقت أمانة</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Cairo', sans-serif;
+}
+
+body{
+height:100vh;
+background:linear-gradient(180deg,#4b0082,#1e3c72);
+display:flex;
+justify-content:center;
+align-items:center;
+color:white;
+}
+
+.container{
+width:90%;
+max-width:420px;
+text-align:center;
+}
+
+.moon{
+font-size:110px;
+margin-bottom:20px;
+position:relative;
+display:inline-block;
+animation:float 3s ease-in-out infinite;
+}
+
+.stars{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%, -50%);
+font-size:26px;
+animation:shine 2s infinite alternate;
+}
+
+@keyframes float{
+0%{transform:translateY(0);}
+50%{transform:translateY(-10px);}
+100%{transform:translateY(0);}
+}
+
+@keyframes shine{
+from{opacity:0.4; transform:translate(-50%,-50%) scale(1);}
+to{opacity:1; transform:translate(-50%,-50%) scale(1.3);}
+}
+
+.card{
+background:rgba(255,255,255,0.08);
+padding:30px 20px;
+border-radius:25px;
+backdrop-filter:blur(10px);
+}
+
+h1{
+color:#ffd700;
+font-size:24px;
+margin-bottom:8px;
+}
+
+h2{
+font-size:18px;
+margin-bottom:10px;
+}
+
+.subtitle{
+font-size:14px;
+opacity:0.9;
+margin-bottom:25px;
+}
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:30px;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+margin-bottom:12px;
+transition:0.3s;
+}
+
+.start-btn{
+background:#facc15;
+color:#4b0082;
+}
+
+.stats-btn{
+background:#9333ea;
+color:white;
+}
+
+button:hover{
+transform:scale(1.05);
+}
+
+.footer{
+margin-top:15px;
+font-size:14px;
+font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="moon">
+🌙
+<div class="stars">✨</div>
+</div>
+
+<div class="card">
+
+<h1>⏰ الوقت أمانة</h1>
+<h2>الانضباط الرمضاني بوعي</h2>
+
+<div class="subtitle">
+مبادرة تربوية لتعزيز قيمة احترام الوقت
+</div>
+
+<button class="start-btn" onclick="startJourney()">
+ابدأ الرحلة
+</button>
+
+<button class="stats-btn" onclick="showStats()">
+عرض الإحصائيات
+</button>
+
+<div class="footer">
+تصميم المعلمة أمل السهلي
+</div>
+
+</div>
+</div>
+
+<script>
+
+/* الذهاب لصفحة تسجيل الدخول */
+function startJourney(){
+    window.location.href = "login.html";
+}
+
+/* الذهاب لصفحة الإحصائيات */
+function showStats(){
+    window.location.href = "dashboard.html";
+}
+
+</script>
+
+</body>
+</html>

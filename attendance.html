@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الحضور</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Cairo', sans-serif;
+}
+
+body{
+min-height:100vh;
+background:linear-gradient(135deg,#5b21b6,#1e3a8a);
+display:flex;
+justify-content:center;
+align-items:flex-start;
+padding-top:40px;
+color:white;
+}
+
+.container{
+width:100%;
+max-width:420px;
+text-align:center;
+padding:0 20px;
+}
+
+.icon{
+font-size:45px;
+margin-bottom:10px;
+}
+
+h1{
+color:#facc15;
+margin-bottom:5px;
+}
+
+.subtitle{
+opacity:.9;
+margin-bottom:20px;
+}
+
+.status-title{
+margin:20px 0;
+font-size:18px;
+}
+
+.options{
+display:flex;
+justify-content:space-between;
+gap:10px;
+margin-bottom:20px;
+}
+
+.card{
+flex:1;
+background:rgba(255,255,255,0.08);
+padding:18px 10px;
+border-radius:18px;
+cursor:pointer;
+transition:.3s;
+}
+
+.card.active{
+background:linear-gradient(135deg,#3b82f6,#2563eb);
+box-shadow:0 0 20px #60a5fa;
+transform:scale(1.05);
+}
+
+.card .emoji{
+font-size:35px;
+margin-bottom:8px;
+}
+
+.card span{
+display:block;
+font-size:15px;
+}
+
+.late{color:#facc15;}
+.present{color:#86efac;}
+.early{color:#fde047;}
+
+.badge-message{
+display:none;
+margin:15px 0;
+}
+
+.badge-message span{
+background:#22c55e;
+padding:10px 20px;
+border-radius:25px;
+font-weight:bold;
+}
+
+.badges{
+display:none;
+background:rgba(255,255,255,0.1);
+padding:20px;
+border-radius:20px;
+margin:15px 0;
+}
+
+.badge-item{
+background:#6b21a8;
+padding:12px;
+border-radius:15px;
+margin-bottom:10px;
+}
+
+.nav{
+display:flex;
+justify-content:space-between;
+margin-top:20px;
+}
+
+.next{
+background:#facc15;
+color:#4b0082;
+padding:12px 28px;
+border:none;
+border-radius:25px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.back{
+background:#9333ea;
+color:white;
+padding:12px 28px;
+border:none;
+border-radius:25px;
+font-weight:bold;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="icon">📋</div>
+<h1>تسجيل الحضور</h1>
+<div class="subtitle" id="welcomeText"></div>
+
+<div class="status-title">حالة الحضور اليوم:</div>
+
+<div class="options">
+
+<div class="card" onclick="selectStatus(this,'late')">
+<div class="emoji">⏰</div>
+<span class="late">متأخرة</span>
+</div>
+
+<div class="card" onclick="selectStatus(this,'present')">
+<div class="emoji">✅</div>
+<span class="present">حاضرة</span>
+</div>
+
+<div class="card" onclick="selectStatus(this,'early')">
+<div class="emoji">🌟</div>
+<span class="early">مبكرة</span>
+</div>
+
+</div>
+
+<div class="badge-message" id="badgeMessage">
+<span>🎖️ مبارك! حصلتي على شارة جديدة</span>
+</div>
+
+<div class="badges" id="badgesSection">
+<h3>🏅 الشارات المتاحة</h3>
+
+<div class="badge-item">⭐ نجمة الأسبوع</div>
+<div class="badge-item">👑 ملكة الأسبوع</div>
+<div class="badge-item">🌅 صاحبة البكور</div>
+<div class="badge-item">🏆 بطلة رمضان</div>
+</div>
+
+<!-- ✅ تم فقط عكس ترتيب الأزرار -->
+<div class="nav">
+<button class="back" onclick="goBack()">السابق</button>
+<button class="next" onclick="goNext()">التالي</button>
+</div>
+
+</div>
+
+<script>
+
+let selected=null;
+
+/* عرض اسم الطالبة */
+window.onload=function(){
+
+let name=localStorage.getItem("currentStudent");
+
+document.getElementById("welcomeText")
+.innerText=name?
+"مرحبًا يا "+name+" 👋":
+"مرحبًا بكِ 👋";
+}
+
+/* تسجيل الحضور وربطه بالـ Dashboard */
+function selectStatus(element,type){
+
+document.querySelectorAll(".card")
+.forEach(card=>card.classList.remove("active"));
+
+element.classList.add("active");
+
+selected=type;
+
+/* بيانات dashboard */
+
+let present=parseInt(localStorage.getItem("present"))||0;
+let early=parseInt(localStorage.getItem("early"))||0;
+let late=parseInt(localStorage.getItem("late"))||0;
+
+if(type==="present") present++;
+if(type==="early") early++;
+if(type==="late") late++;
+
+localStorage.setItem("present",present);
+localStorage.setItem("early",early);
+localStorage.setItem("late",late);
+
+/* بيانات الشارات */
+
+let totalDays=Number(localStorage.getItem("totalDays")||0);
+let earlyDays=Number(localStorage.getItem("earlyDays")||0);
+let streak=Number(localStorage.getItem("streak")||0);
+let badges=Number(localStorage.getItem("badges")||0);
+
+totalDays++;
+
+if(type==="early"){
+earlyDays++;
+streak++;
+badges++;
+}
+else if(type==="present"){
+streak++;
+}
+else{
+streak=0;
+}
+
+localStorage.setItem("totalDays",totalDays);
+localStorage.setItem("earlyDays",earlyDays);
+localStorage.setItem("streak",streak);
+localStorage.setItem("badges",badges);
+
+/* إظهار الشارات */
+
+if(type!=="late"){
+document.getElementById("badgeMessage").style.display="block";
+document.getElementById("badgesSection").style.display="block";
+}else{
+document.getElementById("badgeMessage").style.display="none";
+document.getElementById("badgesSection").style.display="none";
+}
+
+}
+
+/* التالي */
+function goNext(){
+
+if(!selected){
+alert("اختاري حالة الحضور أولاً");
+return;
+}
+
+window.location.href="late-reason.html";
+}
+
+/* السابق */
+function goBack(){
+window.location.href="intintion.html";
+}
+
+</script>
+
+</body>
+</html>
