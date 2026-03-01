@@ -23,15 +23,9 @@ max-width:420px;
 margin:auto;
 }
 
-h1{
-color:#ffd700;
-margin-top:10px;
-}
+h1{color:#ffd700;margin-top:10px;}
 
-.subtitle{
-opacity:.8;
-margin-bottom:25px;
-}
+.subtitle{opacity:.8;margin-bottom:25px;}
 
 .box{
 background:rgba(255,255,255,.1);
@@ -41,9 +35,7 @@ margin-bottom:20px;
 text-align:right;
 }
 
-.progress-item{
-margin:15px 0;
-}
+.progress-item{margin:15px 0;}
 
 .label{
 display:flex;
@@ -88,7 +80,6 @@ font-weight:bold;
 margin-top:10px;
 }
 
-/* ✅ الأزرار بعد التعديل */
 .buttons{
 display:flex;
 justify-content:space-between;
@@ -190,7 +181,6 @@ font-weight:bold;
 
 </div>
 
-<!-- ✅ ترتيب الأزرار -->
 <div class="buttons">
 <a href="documentational.html" class="prev">السابق</a>
 <a href="dashboard.html" class="next">التالي</a>
@@ -200,114 +190,89 @@ font-weight:bold;
 
 <script>
 
-let name = localStorage.getItem("currentStudent");
+/* ======================
+   اسم الطالبة
+====================== */
+
+let name = localStorage.getItem("studentName");
 
 document.getElementById("studentName")
 .innerText = name ? "مرحباً يا " + name : "مرحباً";
 
-let total =
-Number(localStorage.getItem("totalDays"));
 
-let early =
-Number(localStorage.getItem("earlyDays"));
+/* ======================
+   جلب البيانات الحقيقية
+====================== */
 
-let streak =
-Number(localStorage.getItem("streak"));
+let students =
+JSON.parse(localStorage.getItem("students")) || {};
 
-let badges =
-Number(localStorage.getItem("badges"));
+let student =
+students[name] || {};
 
-if(!name || !total){
-resetAll();
-}else{
+let attendanceDays = student.present || 0;
+let studentInteraction = student.interaction || 0;
+let parentInteraction = student.parents || 0;
+let lateReduction = student.late || 0;
+let badges = student.badges || 0;
+
+
+/* ======================
+   الحساب
+====================== */
+
 calculateData();
-}
 
 function calculateData(){
 
+let total =
+attendanceDays +
+studentInteraction +
+parentInteraction +
+lateReduction;
+
+if(total===0) total=1;
+
 let attendancePercent =
-Math.min(100,total*10);
+Math.round((attendanceDays/total)*100);
 
-let interaction =
-Math.min(100,streak*15);
+let interactionPercent =
+Math.round((studentInteraction/total)*100);
 
-let parentInteraction =
-Math.min(100,badges*20);
+let parentPercent =
+Math.round((parentInteraction/total)*100);
 
-let lateReduction =
-Math.min(100,early*15);
+let latePercent =
+Math.max(0,100-
+Math.round((lateReduction/total)*100));
 
-setProgress("attendance",attendancePercent,true);
-setProgress("interaction",interaction,true);
-setProgress("parent",parentInteraction,true);
-setProgress("late",lateReduction,true);
+setProgress("attendance",attendancePercent);
+setProgress("interaction",interactionPercent);
+setProgress("parent",parentPercent);
+setProgress("late",latePercent);
 
-document.getElementById("badgesCount").innerText=badges;
-document.getElementById("recordsCount").innerText=total;
+document.getElementById("badgesCount").innerText = badges;
 
+document.getElementById("recordsCount")
+.innerText =
+Object.keys(students).length;
 }
 
-function resetAll(){
 
-setProgress("attendance",0,false);
-setProgress("interaction",0,false);
-setProgress("parent",0,false);
-setProgress("late",0,false);
+/* ======================
+   تحريك الأشرطة
+====================== */
 
-document.getElementById("badgesCount").innerText=0;
-document.getElementById("recordsCount").innerText=0;
+function setProgress(name,value){
 
-}
+document.getElementById(name+"Percent")
+.innerText=value+"%";
 
-function setProgress(name,value,animate){
-
-let percent=document.getElementById(name+"Percent");
-let bar=document.getElementById(name+"Bar");
-
-percent.innerText=value+"%";
-
-if(!animate){
-bar.style.transition="none";
-}
-
-bar.style.width=value+"%";
-
-}
-
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-  getDatabase,
-  ref,
-  push
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDL5aF9Jos192Bb1lJq25xbTrF9EcZ-XSQ",
-  authDomain: "school-project-girl.firebaseapp.com",
-  databaseURL: "https://school-project-girl-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "school-project-girl",
-  storageBucket: "school-project-girl.firebasestorage.app",
-  messagingSenderId: "60130160811",
-  appId: "1:60130160811:web:e37db48f546fa10895c7ee"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-// جلب اسم الطالبة
-let studentName = localStorage.getItem("studentName");
-
-// تسجيلها في قاعدة البيانات
-if(studentName){
-    push(ref(db, "students"), {
-        name: studentName,
-        time: new Date().toLocaleString()
-    });
+document.getElementById(name+"Bar")
+.style.width=value+"%";
 }
 
 </script>
-</body>
 
+</body>
 </html>
