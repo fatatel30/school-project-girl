@@ -151,13 +151,16 @@ box-shadow:0 0 12px #fff;
 
 <script>
 
-/* جلب الاسم من صفحة login */
+// جلب الاسم من صفحة login
 var studentName = localStorage.getItem("studentName");
 
-if(studentName){
+// لو فيه اسم يظهر
+if(studentName && studentName.trim() !== ""){
 document.getElementById("studentDisplay").innerText = studentName;
-}else{
-document.getElementById("studentDisplay").innerText = "اسم الطالبة";
+}
+// لو مفيش اسم يفضل فاضي
+else{
+document.getElementById("studentDisplay").innerText = "";
 }
 
 function goNext(){
