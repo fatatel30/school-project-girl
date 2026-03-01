@@ -9,149 +9,194 @@
 
 <style>
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Cairo', sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Cairo', sans-serif;
 }
 
 body{
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:linear-gradient(135deg,#4b0082,#1e3c72);
-color:white;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#4b0082,#1e3c72);
+    color:white;
 }
 
 .container{
-background:rgba(255,255,255,0.08);
-padding:40px;
-border-radius:20px;
-width:90%;
-max-width:400px;
-text-align:center;
-backdrop-filter:blur(10px);
-position:relative;
+    background:rgba(255,255,255,0.08);
+    padding:40px;
+    border-radius:20px;
+    width:90%;
+    max-width:400px;
+    text-align:center;
+    backdrop-filter:blur(10px);
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+    position:relative;
 }
 
-/* حركة الإيموجي */
 .emoji{
-font-size:80px;
-margin-bottom:10px;
-animation:float 2s ease-in-out infinite;
+    font-size:80px;
+    margin-bottom:10px;
+    animation:float 2s ease-in-out infinite;
 }
 
 @keyframes float{
-0%{transform:translateY(0);}
-50%{transform:translateY(-12px);}
-100%{transform:translateY(0);}
+    0%{ transform:translateY(0px); }
+    50%{ transform:translateY(-12px); }
+    100%{ transform:translateY(0px); }
 }
 
 h2{
-margin-bottom:20px;
-color:#ffd700;
+    margin-bottom:20px;
+    color:#ffd700;
+    font-size:22px;
 }
 
 .bubble{
-position:absolute;
-top:-5px;
-right:50%;
-transform:translateX(50%);
-background:#e63946;
-padding:8px 15px;
-border-radius:20px;
-display:none;
-font-weight:bold;
+    position:absolute;
+    top:-5px;
+    right:50%;
+    transform:translateX(50%);
+    background:#e63946;
+    color:white;
+    padding:8px 15px;
+    border-radius:20px;
+    font-size:14px;
+    display:none;
+    font-weight:bold;
+}
+
+.bubble::after{
+    content:"";
+    position:absolute;
+    bottom:-8px;
+    right:50%;
+    transform:translateX(50%);
+    border-width:8px;
+    border-style:solid;
+    border-color:#e63946 transparent transparent transparent;
 }
 
 input{
-width:100%;
-padding:14px;
-border-radius:25px;
-border:none;
-margin-bottom:20px;
-text-align:center;
+    width:100%;
+    padding:14px;
+    border-radius:25px;
+    border:none;
+    margin-bottom:20px;
+    font-size:16px;
+    text-align:center;
 }
 
 button{
-width:100%;
-padding:14px;
-border:none;
-border-radius:25px;
-font-size:17px;
-font-weight:bold;
-cursor:pointer;
-margin-bottom:10px;
-transition:.3s;
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:25px;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+    margin-bottom:10px;
 }
 
+/* زر الدخول أصفر */
 #loginBtn{
-background:#ffd700;
-color:#4b0082;
+    background:#ffd700;
+    color:#4b0082;
+}
+
+button.error{
+    background:#e63946 !important;
+    color:white;
+}
+
+button.success{
+    background:#2ecc71 !important;
+    color:white;
 }
 
 .back-btn{
-background:#d8b4fe;
-color:#4b0082;
+    background:#d8b4fe;
+    color:#4b0082;
 }
 
 button:hover{
-transform:scale(1.05);
+    transform:scale(1.05);
 }
 </style>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = {
+  databaseURL: "https://school-project-girl-default-rtdb.asia-southeast1.firebasedatabase.app"
+};
+
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+</script>
 </head>
 
 <body>
 
 <div class="container">
 
-<div id="bubble" class="bubble">
-ادخلي اسمك أولاً
-</div>
+<div class="bubble" id="bubble">ادخلي اسمك أولاً</div>
 
 <div class="emoji">👩‍🎓</div>
 <h2>🌙 أهلاً بكِ</h2>
 
-<input type="text"
-id="studentName"
-placeholder="ادخلي اسمك بالكامل">
+<input type="text" id="studentName" placeholder="اكتبي اسم الطالبة">
 
-<button id="loginBtn" onclick="login()">دخول</button>
-
-<button class="back-btn" onclick="goBack()">رجوع</button>
+<button id="loginBtn" onclick="loginStudent()">دخول ✅</button>
+<button class="back-btn" onclick="goBack()">⬅ رجوع</button>
 
 </div>
 
 <script>
 
-function login(){
+function loginStudent(){
 
-let name =
-document.getElementById("studentName").value.trim();
+let name = document.getElementById("studentName").value.trim();
+let bubble = document.getElementById("bubble");
+let btn = document.getElementById("loginBtn");
 
-let bubble =
-document.getElementById("bubble");
+/* إزالة الحالات القديمة */
+btn.classList.remove("error","success");
 
-/* لو الاسم فاضي */
-if(name===""){
-bubble.style.display="block";
+if(name === ""){
+    
+    bubble.style.display="block";
+    btn.classList.add("error");
 
-setTimeout(()=>{
-bubble.style.display="none";
-},2000);
+    setTimeout(()=>{
+        bubble.style.display="none";
+        btn.classList.remove("error");
+    },2000);
 
-return;
+    return;
 }
+
+/* نجاح */
+btn.classList.add("success");
 
 /* حفظ الاسم */
-localStorage.setItem("currentStudent",name);
+let studentName = document.getElementById("studentName").value;
 
-/* الانتقال لصفحة الترحيب */
-window.location.href="welcome.html";
+localStorage.setItem("studentName", studentName);
+
+database.ref("students").push({
+   name: studentName,
+   time: new Date().toLocaleString()
+});
+/* انتقال بعد لمعة خضراء */
+setTimeout(()=>{
+    window.location.href="welcome.html";
+},700);
+
 }
 
-/* الرجوع للصفحة الرئيسية */
 function goBack(){
 window.location.href="index.html";
 }
