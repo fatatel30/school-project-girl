@@ -3,49 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تقرير الأثر</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<title>تقرير الأثر</title>
 
 <style>
 
 body{
 margin:0;
-font-family:'Cairo',sans-serif;
-background:linear-gradient(135deg,#5b21b6,#1e3a8a);
+font-family:Tahoma;
+background:linear-gradient(180deg,#5b2ca0,#2d3f8f);
 color:white;
 text-align:center;
 }
 
 .container{
 padding:20px;
-max-width:420px;
-margin:auto;
 }
 
-h1{color:#ffd700;margin-top:10px;}
-
-.subtitle{opacity:.8;margin-bottom:25px;}
+h1{
+color:#ffd700;
+margin-top:10px;
+}
 
 .box{
-background:rgba(255,255,255,.1);
+background:rgba(255,255,255,0.1);
 padding:20px;
 border-radius:20px;
-margin-bottom:20px;
-text-align:right;
+margin-top:20px;
 }
 
-.progress-item{margin:15px 0;}
+.progressItem{
+margin:18px 0;
+text-align:right;
+}
 
 .label{
 display:flex;
 justify-content:space-between;
-margin-bottom:5px;
+margin-bottom:6px;
 }
 
 .bar{
-height:14px;
-background:rgba(255,255,255,.2);
+background:rgba(255,255,255,0.2);
+height:12px;
 border-radius:20px;
 overflow:hidden;
 }
@@ -53,30 +53,28 @@ overflow:hidden;
 .fill{
 height:100%;
 border-radius:20px;
-width:0%;
-transition:1s;
 }
 
-.green{background:#22c55e;}
+.green{background:#27c46b;}
 .blue{background:#3b82f6;}
 .purple{background:#a855f7;}
-.yellow{background:#facc15;}
+.yellow{background:#f6b100;}
 
 .cards{
 display:flex;
 gap:15px;
+margin-top:20px;
 }
 
 .card{
 flex:1;
-background:rgba(255,255,255,.1);
+background:rgba(255,255,255,0.1);
 padding:20px;
 border-radius:20px;
 }
 
 .number{
-font-size:26px;
-font-weight:bold;
+font-size:28px;
 margin-top:10px;
 }
 
@@ -84,107 +82,67 @@ margin-top:10px;
 display:flex;
 justify-content:space-between;
 margin-top:25px;
-gap:40px;
 }
 
-.next{
-background:#facc15;
-color:#4b0082;
+.btn{
+border:none;
 padding:12px 25px;
 border-radius:25px;
-text-decoration:none;
+font-size:16px;
 font-weight:bold;
+cursor:pointer;
 }
 
-.prev{
-background:#9333ea;
-color:white;
-padding:12px 25px;
-border-radius:25px;
-text-decoration:none;
-font-weight:bold;
-}
+.next{background:#f6b100;}
+.prev{background:#a855f7;color:white;}
 
 </style>
-   <!-- مكتبات Firebase الأساسية -->
-<script src="https://www.gstatic.com"></script>
-<script src="https://www.gstatic.com"></script>
-
-<script>
-// إعدادات مشروعك الخاصة (نفس التي في صفحة Login)
-const firebaseConfig = {
-  apiKey: "AIzaSyDL5aF9Jos192Bb1lJq25xbTrF9EcZ-XSQ",
-  authDomain: "school-project-girl.firebaseapp.com",
-  databaseURL: "https://school-project-girl-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "school-project-girl",
-  storageBucket: "school-project-girl.firebasestorage.app",
-  messagingSenderId: "60130160811",
-  appId: "1:60130160811:web:e37db48f546fa10895c7ee"
-};
-
-// تفعيل الفايربيز إذا لم يكن مفعلاً
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-const database = firebase.database();
-
-// وظيفة مساعدة لتنظيف الأسماء من الرموز الممنوعة في فايربيز
-function getSafeName() {
-    let name = localStorage.getItem("studentName") || "guest";
-    return name.replace(/[.#$\[\]]/g, "_");
-}
-</script>
-
 </head>
 
 <body>
 
 <div class="container">
 
-<div style="font-size:45px;">📈</div>
-
-<h1>تقرير الأثر</h1>
-<div class="subtitle">نتائج المبادرة وتأثيرها</div>
-
-<h3 id="studentName"></h3>
+<h1>📈 تقرير الأثر</h1>
+<p>نتائج المبادرة وتأثيرها</p>
 
 <div class="box">
 
-<h3>مؤشرات النجاح</h3>
+<h3>📊 مؤشرات النجاح</h3>
 
-<div class="progress-item">
+<div class="progressItem">
 <div class="label">
 <span>نسبة الحضور</span>
-<span id="attendancePercent">50%</span>
+<span id="attendancePercent">0%</span>
 </div>
 <div class="bar">
 <div class="fill green" id="attendanceBar"></div>
 </div>
 </div>
 
-<div class="progress-item">
+<div class="progressItem">
 <div class="label">
 <span>تفاعل الطالبات</span>
-<span id="interactionPercent">60%</span>
+<span id="studentPercent">0%</span>
 </div>
 <div class="bar">
-<div class="fill blue" id="interactionBar"></div>
+<div class="fill blue" id="studentBar"></div>
 </div>
 </div>
 
-<div class="progress-item">
+<div class="progressItem">
 <div class="label">
 <span>تفاعل أولياء الأمور</span>
-<span id="parentPercent">40%</span>
+<span id="parentPercent">0%</span>
 </div>
 <div class="bar">
 <div class="fill purple" id="parentBar"></div>
 </div>
 </div>
 
-<div class="progress-item">
+<div class="progressItem">
 <div class="label">
-<span>انخفاض التأخير</span>
+<span>انخفاض حالات التأخير</span>
 <span id="latePercent">0%</span>
 </div>
 <div class="bar">
@@ -198,116 +156,81 @@ function getSafeName() {
 
 <div class="card">
 🏅
-<div class="number" id="badgesCount">0</div>
+<div class="number" id="badges">0</div>
 شارات موزعة
 </div>
 
 <div class="card">
 📝
-<div class="number" id="recordsCount">0</div>
+<div class="number" id="total">0</div>
 إجمالي التسجيلات
 </div>
 
 </div>
 
 <div class="buttons">
-<a href="documentational.html" class="prev">السابق</a>
-<a href="dashboard.html" class="next">التالي</a>
+<button class="btn next"
+onclick="location.href='next.html'">التالي →</button>
+
+<button class="btn prev"
+onclick="history.back()">← السابق</button>
 </div>
 
 </div>
 
 <script>
 
-/* ======================
-   اسم الطالبة
-====================== */
-
+/* ===== جلب اسم الطالبة من login ===== */
 let name = localStorage.getItem("studentName");
 
-document.getElementById("studentName")
-.innerText = name ? "مرحباً يا " + name : "مرحباً";
-
-
-/* ======================
-   جلب البيانات الحقيقية
-====================== */
-
+/* ===== جلب البيانات ===== */
 let students =
-firebase.database().ref("students").on("value", (snapshot) => {
-    let allData = snapshot.val();
-    // هنا تحطي كود الحسابات اللي كان عندك بس باستخدام allData
-});
+JSON.parse(localStorage.getItem("students")) || {};
 
-let student =
-students[name] || {};
+let s = students[name] || {};
 
-let attendanceDays = student.present || 0;
-let studentInteraction = student.interaction || 0;
-let parentInteraction = student.parents || 0;
-let lateReduction = student.late || 0;
-let badges = student.badges || 0;
+let present = s.present || 0;
+let early   = s.early || 0;
+let late    = s.late || 0;
+let badges  = s.badges || 0;
 
+let totalDays = present + early + late;
 
-/* ======================
-   الحساب
-====================== */
+/* ===== الحسابات ===== */
 
-calculateData();
+let attendance =
+totalDays ? Math.round(((present+early)/totalDays)*100):0;
 
-function calculateData(){
+let lateImprove =
+totalDays ? Math.round((1-(late/totalDays))*100):0;
 
-let total =
-attendanceDays +
-studentInteraction +
-parentInteraction +
-lateReduction;
+/* قيم تجريبية للتفاعل */
+let studentInteract = attendance;
+let parentInteract  = Math.round(attendance*0.9);
 
-if(total===0) total=1;
+/* ===== عرض البيانات ===== */
 
-let attendancePercent =
-Math.round((attendanceDays/total)*100);
+function setBar(id,value){
+document.getElementById(id).style.width=value+"%";
+}
 
-let interactionPercent =
-Math.round((studentInteraction/total)*100);
+document.getElementById("attendancePercent").innerText=attendance+"%";
+setBar("attendanceBar",attendance);
 
-let parentPercent =
-Math.round((parentInteraction/total)*100);
+document.getElementById("studentPercent").innerText=studentInteract+"%";
+setBar("studentBar",studentInteract);
 
-let latePercent =
-Math.max(0,100-
-Math.round((lateReduction/total)*100));
+document.getElementById("parentPercent").innerText=parentInteract+"%";
+setBar("parentBar",parentInteract);
 
-setProgress("attendance",attendancePercent);
-setProgress("interaction",interactionPercent);
-setProgress("parent",parentPercent);
-setProgress("late",latePercent);
+document.getElementById("latePercent").innerText=lateImprove+"%";
+setBar("lateBar",lateImprove);
 
-document.getElementById("badgesCount").innerText = badges;
-
-document.getElementById("recordsCount")
-.innerText =
+document.getElementById("badges").innerText=badges;
+document.getElementById("total").innerText=
 Object.keys(students).length;
-}
-
-
-/* ======================
-   تحريك الأشرطة
-====================== */
-
-function setProgress(name,value){
-
-document.getElementById(name+"Percent")
-.innerText=value+"%";
-
-document.getElementById(name+"Bar")
-.style.width=value+"%";
-}
 
 </script>
 
 </body>
 </html>
-
-
-
