@@ -32,10 +32,25 @@ text-align:center;
 padding:0 20px;
 }
 
-.icon{font-size:45px;margin-bottom:10px;}
-h1{color:#facc15;margin-bottom:5px;}
-.subtitle{opacity:.9;margin-bottom:20px;}
-.status-title{margin:20px 0;font-size:18px;}
+.icon{
+font-size:45px;
+margin-bottom:10px;
+}
+
+h1{
+color:#facc15;
+margin-bottom:5px;
+}
+
+.subtitle{
+opacity:.9;
+margin-bottom:20px;
+}
+
+.status-title{
+margin:20px 0;
+font-size:18px;
+}
 
 .options{
 display:flex;
@@ -59,12 +74,46 @@ box-shadow:0 0 20px #60a5fa;
 transform:scale(1.05);
 }
 
-.card .emoji{font-size:35px;margin-bottom:8px;}
-.card span{display:block;font-size:15px;}
+.card .emoji{
+font-size:35px;
+margin-bottom:8px;
+}
+
+.card span{
+display:block;
+font-size:15px;
+}
 
 .late{color:#facc15;}
 .present{color:#86efac;}
 .early{color:#fde047;}
+
+.badge-message{
+display:none;
+margin:15px 0;
+}
+
+.badge-message span{
+background:#22c55e;
+padding:10px 20px;
+border-radius:25px;
+font-weight:bold;
+}
+
+.badges{
+display:none;
+background:rgba(255,255,255,0.1);
+padding:20px;
+border-radius:20px;
+margin:15px 0;
+}
+
+.badge-item{
+background:#6b21a8;
+padding:12px;
+border-radius:15px;
+margin-bottom:10px;
+}
 
 .nav{
 display:flex;
@@ -72,7 +121,9 @@ justify-content:space-between;
 margin-top:20px;
 }
 
-.next,.back{
+.next{
+background:#facc15;
+color:#4b0082;
 padding:12px 28px;
 border:none;
 border-radius:25px;
@@ -80,8 +131,15 @@ font-weight:bold;
 cursor:pointer;
 }
 
-.next{background:#facc15;color:#4b0082;}
-.back{background:#9333ea;color:white;}
+.back{
+background:#9333ea;
+color:white;
+padding:12px 28px;
+border:none;
+border-radius:25px;
+font-weight:bold;
+cursor:pointer;
+}
 </style>
 </head>
 
@@ -114,6 +172,20 @@ cursor:pointer;
 
 </div>
 
+<div class="badge-message" id="badgeMessage">
+<span>🎖️ مبارك! حصلتي على شارة جديدة</span>
+</div>
+
+<div class="badges" id="badgesSection">
+<h3>🏅 الشارات المتاحة</h3>
+
+<div class="badge-item">⭐ نجمة الأسبوع</div>
+<div class="badge-item">👑 ملكة الأسبوع</div>
+<div class="badge-item">🌅 صاحبة البكور</div>
+<div class="badge-item">🏆 بطلة رمضان</div>
+</div>
+
+<!-- ✅ تم فقط عكس ترتيب الأزرار -->
 <div class="nav">
 <button class="back" onclick="goBack()">السابق</button>
 <button class="next" onclick="goNext()">التالي</button>
@@ -121,19 +193,19 @@ cursor:pointer;
 
 </div>
 
-<!-- ================= JS ================= -->
 <script>
 
 let selected=null;
 
 /* عرض اسم الطالبة */
 window.onload=function(){
-let name=localStorage.getItem("studentName");
-document.getElementById("welcomeText").innerText=
-name?"مرحبًا يا "+name+" 👋":"مرحبًا بكِ 👋";
-};
 
-/* اختيار الحضور */
+ let name = localStorage.getItem("studentName");
+
+document.getElementById("welcomeText").innerText=name?"مرحبًا يا "+name+" 👋":"مرحبًا بكِ 👋";
+}
+
+/* تسجيل الحضور وربطه بالـ Dashboard */
 function selectStatus(element,type){
 
 document.querySelectorAll(".card")
@@ -143,23 +215,66 @@ element.classList.add("active");
 
 selected=type;
 
-/* Firebase */
-let name=localStorage.getItem("studentName")||"طالبة";
-let safeName=name.replace(/[.#$\[\]]/g,"_");
+/* بيانات dashboard */
 
-firebase.database().ref("students/"+safeName).update({
-attendanceStatus:type,
-lastSeen:new Date().toLocaleTimeString()
-});
+let present=parseInt(localStorage.getItem("present"))||0;
+let early=parseInt(localStorage.getItem("early"))||0;
+let late=parseInt(localStorage.getItem("late"))||0;
+
+if(type==="present") present++;
+if(type==="early") early++;
+if(type==="late") late++;
+
+localStorage.setItem("present",present);
+localStorage.setItem("early",early);
+localStorage.setItem("late",late);
+
+/* بيانات الشارات */
+
+let totalDays=Number(localStorage.getItem("totalDays")||0);
+let earlyDays=Number(localStorage.getItem("earlyDays")||0);
+let streak=Number(localStorage.getItem("streak")||0);
+let badges=Number(localStorage.getItem("badges")||0);
+
+totalDays++;
+
+if(type==="early"){
+earlyDays++;
+streak++;
+badges++;
+}
+else if(type==="present"){
+streak++;
+}
+else{
+streak=0;
+}
+
+localStorage.setItem("totalDays",totalDays);
+localStorage.setItem("earlyDays",earlyDays);
+localStorage.setItem("streak",streak);
+localStorage.setItem("badges",badges);
+
+/* إظهار الشارات */
+
+if(type!=="late"){
+document.getElementById("badgeMessage").style.display="block";
+document.getElementById("badgesSection").style.display="block";
+}else{
+document.getElementById("badgeMessage").style.display="none";
+document.getElementById("badgesSection").style.display="none";
+}
 
 }
 
 /* التالي */
 function goNext(){
+
 if(!selected){
 alert("اختاري حالة الحضور أولاً");
 return;
 }
+
 window.location.href="late-reason.html";
 }
 
@@ -167,25 +282,7 @@ window.location.href="late-reason.html";
 function goBack(){
 window.location.href="intintion.html";
 }
-
-</script>
-
-<!-- ================= Firebase ================= -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-
-<script>
-const firebaseConfig = {
-apiKey:"AIzaSyDL5aF9Jos192Bb1lJq25xbTrF9EcZ-XSQ",
-authDomain:"school-project-girl.firebaseapp.com",
-databaseURL:"https://school-project-girl-default-rtdb.asia-southeast1.firebasedatabase.app",
-projectId:"school-project-girl",
-storageBucket:"school-project-girl.firebasestorage.app",
-messagingSenderId:"60130160811",
-appId:"1:60130160811:web:e37db48f546fa10895c7ee"
-};
-
-firebase.initializeApp(firebaseConfig);
+localStorage.setItem("attendanceDays", attendanceDays);
 </script>
 
 </body>
