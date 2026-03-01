@@ -99,6 +99,35 @@ margin-bottom:20px;
 font-size:18px;
 }
 </style>
+   <!-- مكتبات Firebase الأساسية -->
+<script src="https://www.gstatic.com"></script>
+<script src="https://www.gstatic.com"></script>
+
+<script>
+// إعدادات مشروعك الخاصة (نفس التي في صفحة Login)
+const firebaseConfig = {
+  apiKey: "AIzaSyDL5aF9Jos192Bb1lJq25xbTrF9EcZ-XSQ",
+  authDomain: "school-project-girl.firebaseapp.com",
+  databaseURL: "https://school-project-girl-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "school-project-girl",
+  storageBucket: "school-project-girl.firebasestorage.app",
+  messagingSenderId: "60130160811",
+  appId: "1:60130160811:web:e37db48f546fa10895c7ee"
+};
+
+// تفعيل الفايربيز إذا لم يكن مفعلاً
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const database = firebase.database();
+
+// وظيفة مساعدة لتنظيف الأسماء من الرموز الممنوعة في فايربيز
+function getSafeName() {
+    let name = localStorage.getItem("studentName") || "guest";
+    return name.replace(/[.#$\[\]]/g, "_");
+}
+</script>
+
 </head>
 
 <body>
@@ -241,6 +270,7 @@ firebase.database().ref("students").on("value",(snapshot)=>{
 </script>
 </body>
 </html>
+
 
 
 
