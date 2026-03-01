@@ -208,6 +208,11 @@ alert("من فضلك اكتب الاسم وحدد التعهد");
 alert("تم تأكيد التعهد بنجاح ✅");
 }
 }
+let student = localStorage.getItem("studentName");
+firebase.database().ref("students/" + student).update({
+    parentName: name,
+    parentAgreement: agree
+});
 
 /* ✅ الصفحة التالية */
 function goNext(){
@@ -224,3 +229,4 @@ window.location.href="student-states.html";
 </body>
 
 </html>
+
