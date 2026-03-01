@@ -184,12 +184,8 @@ container.innerHTML += `
 <div class="number">${present+early}</div>
 حضور
 </div>
-<div class="card">
-   <div class="number">
-      <span id="studentsCount">0</span>
-   </div>
-   عدد الطالبات
-</div>
+
+ </div>
 <div class="percent">
 ${percent}% نسبة الانضباط
 </div>
@@ -241,4 +237,5 @@ firebase.database().ref("students").on("value",(snapshot)=>{
 </script>
 </body>
 </html>
+
 
