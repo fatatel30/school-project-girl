@@ -274,7 +274,40 @@ bar.style.width=value+"%";
 
 }
 
-</script>
+<script type="module">
 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getDatabase,
+  ref,
+  push
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDL5aF9Jos192Bb1lJq25xbTrF9EcZ-XSQ",
+  authDomain: "school-project-girl.firebaseapp.com",
+  databaseURL: "https://school-project-girl-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "school-project-girl",
+  storageBucket: "school-project-girl.firebasestorage.app",
+  messagingSenderId: "60130160811",
+  appId: "1:60130160811:web:e37db48f546fa10895c7ee"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// جلب اسم الطالبة
+let studentName = localStorage.getItem("studentName");
+
+// تسجيلها في قاعدة البيانات
+if(studentName){
+    push(ref(db, "students"), {
+        name: studentName,
+        time: new Date().toLocaleString()
+    });
+}
+
+</script>
 </body>
+
 </html>
