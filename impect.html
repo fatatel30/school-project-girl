@@ -205,7 +205,10 @@ document.getElementById("studentName")
 ====================== */
 
 let students =
-JSON.parse(localStorage.getItem("students")) || {};
+firebase.database().ref("students").on("value", (snapshot) => {
+    let allData = snapshot.val();
+    // هنا تحطي كود الحسابات اللي كان عندك بس باستخدام allData
+});
 
 let student =
 students[name] || {};
@@ -276,3 +279,4 @@ document.getElementById(name+"Bar")
 
 </body>
 </html>
+
