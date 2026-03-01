@@ -200,12 +200,9 @@ let selected=null;
 /* عرض اسم الطالبة */
 window.onload=function(){
 
-let name=localStorage.getItem("currentStudent");
+ let name = localStorage.getItem("studentName");
 
-document.getElementById("welcomeText")
-.innerText=name?
-"مرحبًا يا "+name+" 👋":
-"مرحبًا بكِ 👋";
+document.getElementById("welcomeText").innerText=name?"مرحبًا يا "+name+" 👋":"مرحبًا بكِ 👋";
 }
 
 /* تسجيل الحضور وربطه بالـ Dashboard */
@@ -285,7 +282,7 @@ window.location.href="late-reason.html";
 function goBack(){
 window.location.href="intintion.html";
 }
-
+localStorage.setItem("attendanceDays", attendanceDays);
 </script>
 
 </body>
