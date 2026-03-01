@@ -3,217 +3,224 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>لوحة الإحصائيات</title>
+<title>إحصائيات</title>
 
 <style>
-
 body{
-font-family:Tahoma;
 margin:0;
-background:linear-gradient(180deg,#4c1d95,#1e3a8a);
+padding-bottom:80px;
+font-family:Tahoma;
+background:linear-gradient(135deg,#5f1eb6,#1f3c88);
 color:white;
-direction:rtl;
-}
-
-/* الهيدر */
-.header{
 text-align:center;
-padding:25px;
+font-weight:bold;
 }
 
-.header h1{
-color:#ffd54f;
+.container{padding:20px;}
+
+h1{color:#ffd700;}
+
+.subtitle{color:#ddd;margin-bottom:25px;}
+
+.studentBox{
+background:rgba(255,255,255,0.1);
+padding:20px;
+border-radius:20px;
+margin-bottom:25px;
+text-align:right;
 }
 
-/* كارت الطالبة */
+.cards{
+display:grid;
+grid-template-columns:1fr 1fr 1fr;
+gap:12px;
+margin-top:15px;
+}
+
 .card{
-background:rgba(255,255,255,0.08);
-margin:15px;
 padding:15px;
 border-radius:15px;
-}
-
-/* الاسم */
-.name{
-color:#ffd54f;
-font-size:20px;
-margin-bottom:10px;
-}
-
-/* الاحصائيات */
-.stats{
-display:flex;
-gap:10px;
-justify-content:space-between;
-}
-
-.stat{
-background:#6d28d9;
-flex:1;
-padding:10px;
-border-radius:10px;
+background:linear-gradient(135deg,#6a2db5,#8a42d8);
 text-align:center;
 }
 
-.stat span{
-font-size:22px;
-display:block;
+.number{
+font-size:26px;
+margin:8px 0;
 }
 
-/* شريط الانضباط */
-.progress{
-background:#5b21b6;
-height:8px;
-border-radius:10px;
+.progressBg{
+background:rgba(255,255,255,0.2);
+height:12px;
+border-radius:20px;
 margin-top:10px;
 overflow:hidden;
 }
 
-.progress div{
+.progress{
 height:100%;
-background:gold;
-width:0%;
+background:#f6b100;
 }
 
-/* الأزرار */
-.buttons{
+.percent{
+margin-top:6px;
+font-size:14px;
+}
+
+/* ===== الأزرار السفلية ===== */
+
+.bottomButtons{
+position:fixed;
+bottom:0;
+right:0;
+left:0;
+background:rgba(0,0,0,0.3);
 display:flex;
 justify-content:space-between;
-padding:20px;
-gap:10px; /* تقليل المسافة */
+padding:12px 20px;
+backdrop-filter:blur(6px);
 }
 
-button{
+.navBtn{
+background:#ffd700;
 border:none;
 padding:12px 20px;
-border-radius:25px;
+border-radius:12px;
 font-size:16px;
+font-weight:bold;
 cursor:pointer;
 }
 
-.home{
-background:orange;
-}
-
-.prev{
-background:#9333ea;
-color:white;
-padding:16px 30px; /* تكبير زر السابق */
+.totalBox{
+background:rgba(255,255,255,0.15);
+padding:15px;
+border-radius:15px;
+margin-bottom:20px;
 font-size:18px;
 }
-
 </style>
 </head>
 
 <body>
 
-<div class="header">
-📊
-<h1>لوحة الإحصائيات الشاملة</h1>
-<p>إحصائيات جميع الطالبات</p>
+<div class="container">
+
+<h1>📊 لوحة الإحصائيات الشاملة</h1>
+<p class="subtitle">إحصائيات جميع الطالبات</p>
+
+<div id="totalStudents" class="totalBox">
+إجمالي التسجيلات: 0
 </div>
 
-<div class="card">
-
-<div class="name" id="studentName">
-الطالبة
-</div>
-
-<div class="stats">
-
-<div class="stat">
-<span id="late">0</span>
-متأخر
-</div>
-
-<div class="stat">
-<span id="early">0</span>
-مبكر
-</div>
-
-<div class="stat">
-<span id="present">0</span>
-حضور
-</div>
-
-</div>
-
-<p style="margin-top:10px;">نسبة الانضباط</p>
-
-<div class="progress">
-<div id="disciplineBar"></div>
-</div>
-
-<p id="percentText">0%</p>
-
-</div>
-
-<!-- الأزرار -->
-<div class="buttons">
-
-<button class="home" onclick="goHome()">
-🏠 الصفحة الرئيسية
-</button>
-
-<button class="prev" onclick="goPrev()">
-السابق
-</button>
+<div id="studentsContainer"></div>
 
 </div>
 
 <script>
 
-/* اسم الطالبة من login */
-let name = localStorage.getItem("studentName");
+/* =========================
+   جلب جميع الطالبات
+========================= */
 
-if(name){
-document.getElementById("studentName").innerText=name;
+let students =
+JSON.parse(localStorage.getItem("students")) || {};
+
+let container =
+document.getElementById("studentsContainer");
+
+/* إجمالي التسجيلات */
+document.getElementById("totalStudents").innerHTML =
+"إجمالي التسجيلات: " +
+Object.keys(students).length;
+
+
+/* لو لا توجد بيانات */
+if(Object.keys(students).length===0){
+container.innerHTML="<h3>لا توجد بيانات بعد</h3>";
 }
 
-/* ✅ قراءة بيانات الحضور من attendance */
-let present =
-parseInt(localStorage.getItem("present")) || 0;
 
-let early =
-parseInt(localStorage.getItem("early")) || 0;
+/* =========================
+   إنشاء بطاقة لكل طالبة
+========================= */
 
-let late =
-parseInt(localStorage.getItem("late")) || 0;
+for(let name in students){
 
-/* عرض القيم */
-document.getElementById("present").innerText=present;
-document.getElementById("early").innerText=early;
-document.getElementById("late").innerText=late;
+let s = students[name];
 
-/* حساب الانضباط */
+let present = s.present || 0;
+let early   = s.early || 0;
+let late    = s.late || 0;
+let badges  = s.badges || 0;
+
 let total = present + early + late;
 
 let percent = 0;
 
 if(total>0){
-percent = Math.round(
-((present+early)/total)*100
-);
+percent =
+Math.round(((present+early)/total)*100);
 }
 
-document.getElementById("disciplineBar")
-.style.width=percent+"%";
+container.innerHTML += `
 
-document.getElementById("percentText")
-.innerText=percent+"%";
+<div class="studentBox">
 
-/* الصفحة الرئيسية */
-function goHome(){
-window.location.href="index.html";
-}
+<h2>${name}</h2>
 
-/* السابق */
-function goPrev(){
-window.location.href="impect.html";
+<div class="cards">
+
+<div class="card">
+<div class="number">${late}</div>
+متأخر
+</div>
+
+<div class="card">
+<div class="number">${early}</div>
+مبكر
+</div>
+
+<div class="card">
+<div class="number">${present+early}</div>
+حضور
+</div>
+
+</div>
+
+<div class="percent">
+${percent}% نسبة الانضباط
+</div>
+
+<div class="progressBg">
+<div class="progress"
+style="width:${percent}%">
+</div>
+</div>
+
+<br>
+🎖️ الشارات: ${badges}
+
+</div>
+
+`;
 }
 
 </script>
+
+<!-- أزرار التنقل -->
+<div class="bottomButtons">
+
+<button class="navBtn"
+onclick="location.href='impect.html'">
+السابق
+</button>
+
+<button class="navBtn"
+onclick="location.href='index.html'">
+🏠
+</button>
+
+</div>
 
 </body>
 </html>
