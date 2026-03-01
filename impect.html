@@ -1,236 +1,234 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+يعني كده صح
 
-<title>تقرير الأثر</title>
-
-<style>
-
-body{
-margin:0;
-font-family:Tahoma;
-background:linear-gradient(180deg,#5b2ca0,#2d3f8f);
-color:white;
-text-align:center;
-}
-
-.container{
-padding:20px;
-}
-
-h1{
-color:#ffd700;
-margin-top:10px;
-}
-
-.box{
-background:rgba(255,255,255,0.1);
-padding:20px;
-border-radius:20px;
-margin-top:20px;
-}
-
-.progressItem{
-margin:18px 0;
-text-align:right;
-}
-
-.label{
-display:flex;
-justify-content:space-between;
-margin-bottom:6px;
-}
-
-.bar{
-background:rgba(255,255,255,0.2);
-height:12px;
-border-radius:20px;
-overflow:hidden;
-}
-
-.fill{
-height:100%;
-border-radius:20px;
-}
-
-.green{background:#27c46b;}
-.blue{background:#3b82f6;}
-.purple{background:#a855f7;}
-.yellow{background:#f6b100;}
-
-.cards{
-display:flex;
-gap:15px;
-margin-top:20px;
-}
-
-.card{
-flex:1;
-background:rgba(255,255,255,0.1);
-padding:20px;
-border-radius:20px;
-}
-
-.number{
-font-size:28px;
-margin-top:10px;
-}
-
-.buttons{
-display:flex;
-justify-content:space-between;
-margin-top:25px;
-}
-
-.btn{
-border:none;
-padding:12px 25px;
-border-radius:25px;
-font-size:16px;
-font-weight:bold;
-cursor:pointer;
-}
-
-.next{background:#f6b100;}
-.prev{background:#a855f7;color:white;}
-
-</style>
-</head>
-
-<body>
-
-<div class="container">
-
-<h1>📈 تقرير الأثر</h1>
-<p>نتائج المبادرة وتأثيرها</p>
-
-<div class="box">
-
-<h3>📊 مؤشرات النجاح</h3>
-
-<div class="progressItem">
-<div class="label">
-<span>نسبة الحضور</span>
-<span id="attendancePercent">0%</span>
-</div>
-<div class="bar">
-<div class="fill green" id="attendanceBar"></div>
-</div>
-</div>
-
-<div class="progressItem">
-<div class="label">
-<span>تفاعل الطالبات</span>
-<span id="studentPercent">0%</span>
-</div>
-<div class="bar">
-<div class="fill blue" id="studentBar"></div>
-</div>
-</div>
-
-<div class="progressItem">
-<div class="label">
-<span>تفاعل أولياء الأمور</span>
-<span id="parentPercent">0%</span>
-</div>
-<div class="bar">
-<div class="fill purple" id="parentBar"></div>
-</div>
-</div>
-
-<div class="progressItem">
-<div class="label">
-<span>انخفاض حالات التأخير</span>
-<span id="latePercent">0%</span>
-</div>
-<div class="bar">
-<div class="fill yellow" id="lateBar"></div>
-</div>
-</div>
-
-</div>
-
-<div class="cards">
-
-<div class="card">
-🏅
-<div class="number" id="badges">0</div>
-شارات موزعة
-</div>
-
-<div class="card">
-📝
-<div class="number" id="total">0</div>
-إجمالي التسجيلات
-</div>
-
-</div>
-
-<div class="buttons">
-<button class="btn next"
-onclick="location.href='next.html'">التالي →</button>
-
-<button class="btn prev"
-onclick="history.back()">← السابق</button>
-</div>
-
-</div>
-
-<script>
-
-/* ===== جلب اسم الطالبة من login ===== */
-let name = localStorage.getItem("studentName");
-
-/* ===== جلب البيانات ===== */
-let students =
-JSON.parse(localStorage.getItem("students")) || {};
-
-let s = students[name] || {};
-
-let present = s.present || 0;
-let early   = s.early || 0;
-let late    = s.late || 0;
-let badges  = s.badges || 0;
-
-let totalDays = present + early + late;
-
-/* ===== الحسابات ===== */
-
-let attendance =
-totalDays ? Math.round(((present+early)/totalDays)*100):0;
-
-let lateImprove =
-totalDays ? Math.round((1-(late/totalDays))*100):0;
-
-/* قيم تجريبية للتفاعل */
-let studentInteract = attendance;
-let parentInteract  = Math.round(attendance*0.9);
-
-/* ===== عرض البيانات ===== */
-
-function setBar(id,value){
-document.getElementById(id).style.width=value+"%";
-}
-
-document.getElementById("attendancePercent").innerText=attendance+"%";
-setBar("attendanceBar",attendance);
-
-document.getElementById("studentPercent").innerText=studentInteract+"%";
-setBar("studentBar",studentInteract);
-
-document.getElementById("parentPercent").innerText=parentInteract+"%";
-setBar("parentBar",parentInteract);
-
-document.getElementById("latePercent").innerText=lateImprove+"%";
-setBar("lateBar",lateImprove);
-
-document.getElementById("badges").innerText=badges;
-document.getElementById("total").innerText=
-Object.keys(students).length;
-
-</script>
-
-</body>
+<!DOCTYPE html>  <html lang="ar" dir="rtl">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>تقرير الأثر</title>  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">  <style>  
+  
+body{  
+margin:0;  
+font-family:'Cairo',sans-serif;  
+background:linear-gradient(135deg,#5b21b6,#1e3a8a);  
+color:white;  
+text-align:center;  
+}  
+  
+.container{  
+padding:20px;  
+max-width:420px;  
+margin:auto;  
+}  
+  
+h1{color:#ffd700;margin-top:10px;}  
+  
+.subtitle{opacity:.8;margin-bottom:25px;}  
+  
+.box{  
+background:rgba(255,255,255,.1);  
+padding:20px;  
+border-radius:20px;  
+margin-bottom:20px;  
+text-align:right;  
+}  
+  
+.progress-item{margin:15px 0;}  
+  
+.label{  
+display:flex;  
+justify-content:space-between;  
+margin-bottom:5px;  
+}  
+  
+.bar{  
+height:14px;  
+background:rgba(255,255,255,.2);  
+border-radius:20px;  
+overflow:hidden;  
+}  
+  
+.fill{  
+height:100%;  
+border-radius:20px;  
+width:0%;  
+transition:1s;  
+}  
+  
+.green{background:#22c55e;}  
+.blue{background:#3b82f6;}  
+.purple{background:#a855f7;}  
+.yellow{background:#facc15;}  
+  
+.cards{  
+display:flex;  
+gap:15px;  
+}  
+  
+.card{  
+flex:1;  
+background:rgba(255,255,255,.1);  
+padding:20px;  
+border-radius:20px;  
+}  
+  
+.number{  
+font-size:26px;  
+font-weight:bold;  
+margin-top:10px;  
+}  
+  
+.buttons{  
+display:flex;  
+justify-content:space-between;  
+margin-top:25px;  
+gap:40px;  
+}  
+  
+.next{  
+background:#facc15;  
+color:#4b0082;  
+padding:12px 25px;  
+border-radius:25px;  
+text-decoration:none;  
+font-weight:bold;  
+}  
+  
+.prev{  
+background:#9333ea;  
+color:white;  
+padding:12px 25px;  
+border-radius:25px;  
+text-decoration:none;  
+font-weight:bold;  
+}  
+  
+</style>  </head>  <body>  <div class="container">  <div style="font-size:45px;">📈</div>  <h1>تقرير الأثر</h1>  
+<div class="subtitle">نتائج المبادرة وتأثيرها</div>  <h3 id="studentName"></h3>  <div class="box">  <h3>مؤشرات النجاح</h3>  <div class="progress-item">  
+<div class="label">  
+<span>نسبة الحضور</span>  
+<span id="attendancePercent">0%</span>  
+</div>  
+<div class="bar">  
+<div class="fill green" id="attendanceBar"></div>  
+</div>  
+</div>  <div class="progress-item">  
+<div class="label">  
+<span>تفاعل الطالبات</span>  
+<span id="interactionPercent">0%</span>  
+</div>  
+<div class="bar">  
+<div class="fill blue" id="interactionBar"></div>  
+</div>  
+</div>  <div class="progress-item">  
+<div class="label">  
+<span>تفاعل أولياء الأمور</span>  
+<span id="parentPercent">0%</span>  
+</div>  
+<div class="bar">  
+<div class="fill purple" id="parentBar"></div>  
+</div>  
+</div>  <div class="progress-item">  
+<div class="label">  
+<span>انخفاض التأخير</span>  
+<span id="latePercent">0%</span>  
+</div>  
+<div class="bar">  
+<div class="fill yellow" id="lateBar"></div>  
+</div>  
+</div>  </div>  <div class="cards">  <div class="card">  
+🏅  
+<div class="number" id="badgesCount">1</div>  
+شارات موزعة  
+</div>  <div class="card">  
+📝  
+<div class="number" id="recordsCount">0</div>  
+إجمالي التسجيلات  
+</div>  </div>  <div class="buttons">  
+<a href="documentational.html" class="prev">السابق</a>  
+<a href="dashboard.html" class="next">التالي</a>  
+</div>  </div>  <script>  
+  
+/* ======================  
+   اسم الطالبة  
+====================== */  
+  
+let name = localStorage.getItem("studentName");  
+  
+document.getElementById("studentName")  
+.innerText = name ? "مرحباً يا " + name : "مرحباً";  
+  
+  
+/* ======================  
+   جلب البيانات الحقيقية  
+====================== */  
+  
+let students =  
+JSON.parse(localStorage.getItem("students")) || {};  
+  
+let student =  
+students[name] || {};  
+  
+let attendanceDays = student.present || 0;  
+let studentInteraction = student.interaction || 0;  
+let parentInteraction = student.parents || 0;  
+let lateReduction = student.late || 0;  
+let badges = student.badges || 0;  
+  
+  
+/* ======================  
+   الحساب  
+====================== */  
+  
+calculateData();  
+  
+function calculateData(){  
+  
+let total =  
+attendanceDays +  
+studentInteraction +  
+parentInteraction +  
+lateReduction;  
+  
+if(total===0) total=1;  
+  
+let attendancePercent =  
+Math.round((attendanceDays/total)*100);  
+  
+let interactionPercent =  
+Math.round((studentInteraction/total)*100);  
+  
+let parentPercent =  
+Math.round((parentInteraction/total)*100);  
+  
+let latePercent =  
+Math.max(0,100-  
+Math.round((lateReduction/total)*100));  
+  
+setProgress("attendance",attendancePercent);  
+setProgress("interaction",interactionPercent);  
+setProgress("parent",parentPercent);  
+setProgress("late",latePercent);  
+  
+document.getElementById("badgesCount").innerText = badges;  
+  
+document.getElementById("recordsCount")  
+.innerText =  
+Object.keys(students).length;  
+}  
+  
+  
+/* ======================  
+   تحريك الأشرطة  
+====================== */  
+  
+function setProgress(name,value){  
+  
+document.getElementById(name+"Percent")  
+.innerText=value+"%";  
+  
+document.getElementById(name+"Bar")  
+.style.width=value+"%";  
+}  
+  
+</script>  </body>  
 </html>
