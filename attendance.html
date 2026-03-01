@@ -289,8 +289,29 @@ function goBack(){
 window.location.href="intintion.html";
 }
 localStorage.setItem("attendanceDays", attendanceDays);
+<!-- Firebase Libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+<script>
+/* إعدادات مشروع Firebase */
+const firebaseConfig = {
+  apiKey: "AIzaSyDL5aF9Jos192Bb1lJq25xbTrF9EcZ-XSQ",
+  authDomain: "school-project-girl.firebaseapp.com",
+  databaseURL: "https://school-project-girl-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "school-project-girl",
+  storageBucket: "school-project-girl.firebasestorage.app",
+  messagingSenderId: "60130160811",
+  appId: "1:60130160811:web:e37db48f546fa10895c7ee"
+};
+
+/* تشغيل Firebase */
+firebase.initializeApp(firebaseConfig);
 </script>
 
 </body>
 </html>
+</body>
+</html>
+
 
