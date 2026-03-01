@@ -43,15 +43,14 @@ body{
 }
 
 @keyframes float{
-    0%{ transform:translateY(0px); }
-    50%{ transform:translateY(-12px); }
-    100%{ transform:translateY(0px); }
+    0%{transform:translateY(0);}
+    50%{transform:translateY(-12px);}
+    100%{transform:translateY(0);}
 }
 
 h2{
     margin-bottom:20px;
     color:#ffd700;
-    font-size:22px;
 }
 
 .bubble{
@@ -63,20 +62,8 @@ h2{
     color:white;
     padding:8px 15px;
     border-radius:20px;
-    font-size:14px;
     display:none;
     font-weight:bold;
-}
-
-.bubble::after{
-    content:"";
-    position:absolute;
-    bottom:-8px;
-    right:50%;
-    transform:translateX(50%);
-    border-width:8px;
-    border-style:solid;
-    border-color:#e63946 transparent transparent transparent;
 }
 
 input{
@@ -101,7 +88,6 @@ button{
     margin-bottom:10px;
 }
 
-/* زر الدخول أصفر */
 #loginBtn{
     background:#ffd700;
     color:#4b0082;
@@ -126,16 +112,26 @@ button:hover{
     transform:scale(1.05);
 }
 </style>
+
+<!-- ✅ Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
 <script>
 const firebaseConfig = {
-  databaseURL: "https://school-project-girl-default-rtdb.asia-southeast1.firebasedatabase.app"
+  apiKey: "AIzaSyDL5aF9Jos192Bb1lJq25xbTrF9EcZ-XSQ",
+  authDomain: "school-project-girl.firebaseapp.com",
+  databaseURL: "https://school-project-girl-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "school-project-girl",
+  storageBucket: "school-project-girl.firebasestorage.app",
+  messagingSenderId: "60130160811",
+  appId: "1:60130160811:web:e37db48f546fa10895c7ee"
 };
 
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 </script>
+
 </head>
 
 <body>
@@ -158,41 +154,40 @@ const database = firebase.database();
 
 function loginStudent(){
 
-let name = document.getElementById("studentName").value.trim();
-let bubble = document.getElementById("bubble");
-let btn = document.getElementById("loginBtn");
+let name=document.getElementById("studentName").value.trim();
+let bubble=document.getElementById("bubble");
+let btn=document.getElementById("loginBtn");
 
-/* إزالة الحالات القديمة */
 btn.classList.remove("error","success");
 
-if(name === ""){
-    
-    bubble.style.display="block";
-    btn.classList.add("error");
+if(name===""){
 
-    setTimeout(()=>{
-        bubble.style.display="none";
-        btn.classList.remove("error");
-    },2000);
+bubble.style.display="block";
+btn.classList.add("error");
 
-    return;
+setTimeout(()=>{
+bubble.style.display="none";
+btn.classList.remove("error");
+},2000);
+
+return;
 }
 
-/* نجاح */
+/* ✅ نجاح */
 btn.classList.add("success");
 
-/* حفظ الاسم */
-let studentName = document.getElementById("studentName").value;
+/* حفظ محلي */
+localStorage.setItem("studentName",name);
 
-localStorage.setItem("studentName", studentName);
-
+/* ✅ حفظ في Firebase */
 database.ref("students").push({
-   name: studentName,
-   time: new Date().toLocaleString()
+name:name,
+time:new Date().toLocaleString()
 });
-/* انتقال بعد لمعة خضراء */
+
+/* انتقال */
 setTimeout(()=>{
-    window.location.href="welcome.html";
+window.location.href="welcome.html";
 },700);
 
 }
