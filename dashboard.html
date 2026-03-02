@@ -1,218 +1,90 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>إحصائيات</title>
-
+<title>إحصائيات الطالبات</title>
 <style>
 body{
-margin:0;
-padding-bottom:80px;
 font-family:Tahoma;
 background:linear-gradient(135deg,#5f1eb6,#1f3c88);
 color:white;
 text-align:center;
-font-weight:bold;
+padding:20px;
 }
-
-.container{padding:20px;}
-
-h1{color:#ffd700;}
-
-.subtitle{color:#ddd;margin-bottom:25px;}
-
-.studentBox{
+.card{
 background:rgba(255,255,255,0.1);
+margin:15px;
 padding:20px;
 border-radius:20px;
-margin-bottom:25px;
-text-align:right;
 }
-
-.cards{
-display:grid;
-grid-template-columns:1fr 1fr 1fr;
-gap:12px;
-margin-top:15px;
-}
-
-.card{
-padding:15px;
-border-radius:15px;
-background:linear-gradient(135deg,#6a2db5,#8a42d8);
-text-align:center;
-}
-
-.number{
-font-size:26px;
-margin:8px 0;
-}
-
-.progressBg{
-background:rgba(255,255,255,0.2);
-height:12px;
+.box{
+display:inline-block;
+width:90px;
+height:100px;
+margin:10px;
+background:linear-gradient(#a64bf4,#6a1bb9);
 border-radius:20px;
-margin-top:10px;
-overflow:hidden;
-}
-
-.progress{
-height:100%;
-background:#f6b100;
-}
-
-.percent{
-margin-top:6px;
-font-size:14px;
-}
-
-.bottomButtons{
-position:fixed;
-bottom:0;
-right:0;
-left:0;
-background:rgba(0,0,0,0.3);
-display:flex;
-justify-content:space-between;
-padding:12px 20px;
-backdrop-filter:blur(6px);
-}
-
-.navBtn{
-background:#ffd700;
-border:none;
-padding:12px 20px;
-border-radius:12px;
-font-size:16px;
-font-weight:bold;
-cursor:pointer;
-}
-
-.totalBox{
-background:rgba(255,255,255,0.15);
-padding:15px;
-border-radius:15px;
-margin-bottom:20px;
+padding-top:20px;
 font-size:18px;
+color:white;
 }
 </style>
 </head>
-
 <body>
 
-<div class="container">
-
-<h1>📊 لوحة الإحصائيات الشاملة</h1>
-<p class="subtitle">إحصائيات جميع الطالبات</p>
-
-<div id="totalStudents" class="totalBox">
-جاري التحميل...
-</div>
-
-<div id="studentsContainer"></div>
-
-</div>
+<h2>📊 إحصائيات الطالبات</h2>
+<div id="data"></div>
 
 <script>
-
-// رابط الشيت بصيغة CSV
 let url = "https://docs.google.com/spreadsheets/d/1T71_MTXMFzDj8g-BRrq6MxL44q7zZojxlfxbRuoQgyo/export?format=csv";
 
 fetch(url)
 .then(res => res.text())
-.then(data => {
+.then(text => {
+  let rows = text.trim().split("\n").slice(1); // نتخطى رأس الجدول
+  let students = {};
 
-let rows = data.split("\n").slice(1);
-let result = {};
-
-rows.forEach(row => {
+  rows.forEach(row => {
     let cols = row.split(",");
-    let name = (cols[1] || "").trim().toLowerCase();
-    let status = cols[2] || "";
+    let rawName = cols[1] || "";
+    let type = cols[2] || "";
 
-    if(!name) return;
-
+    // تنظيف الاسم
+    let name = rawName.trim().toLowerCase();
     name = name.charAt(0).toUpperCase() + name.slice(1);
 
-    if(!result[name]){
-        result[name] = {present:0, early:0, late:0};
+    if(!students[name]){
+      students[name] = {present:0, early:0, late:0};
     }
 
-    if(status.includes("حضور")) result[name].present++;
-    if(status.includes("مبكر")) result[name].early++;
-    if(status.includes("متأخر")) result[name].late++;
+    if(type.includes("حضور")) students[name].present++;
+    if(type.includes("مبكر")) students[name].early++;
+    if(type.includes("متأخر")) students[name].late++;
+  });
+
+  let container = document.getElementById("data");
+
+  for(let name in students){
+    let p = students[name].present;
+    let e = students[name].early;
+    let l = students[name].late;
+    let total = p + e + l;
+    let percent = total === 0 ? 0 : Math.round(((p + e) / total) * 100);
+    let badges = Math.floor(percent / 20);
+
+    container.innerHTML += `
+      <div class="card">
+        <h3>${name}</h3>
+        <div class="box">${p}<br>حضور</div>
+        <div class="box">${e}<br>مبكر</div>
+        <div class="box">${l}<br>متأخر</div>
+        <h4>نسبة الانضباط: ${percent}%</h4>
+        <h4>⭐ الشارات: ${badges}</h4>
+      </div>
+    `;
+  }
 });
-
-let container = document.getElementById("studentsContainer");
-
-document.getElementById("totalStudents").innerHTML =
-"إجمالي الطالبات: " + Object.keys(result).length;
-
-for(let name in result){
-
-let s = result[name];
-let total = s.present + s.early + s.late;
-
-let percent = total>0 ?
-Math.round(((s.present+s.early)/total)*100) : 0;
-
-container.innerHTML += `
-<div class="studentBox">
-<h2>${name}</h2>
-
-<div class="cards">
-
-<div class="card">
-<div class="number">${s.late}</div>
-متأخر
-</div>
-
-<div class="card">
-<div class="number">${s.early}</div>
-مبكر
-</div>
-
-<div class="card">
-<div class="number">${s.present + s.early}</div>
-حضور
-</div>
-
-</div>
-
-<div class="percent">
-${percent}% نسبة الانضباط
-</div>
-
-<div class="progressBg">
-<div class="progress" style="width:${percent}%"></div>
-</div>
-
-</div>
-`;
-}
-
-})
-.catch(()=>{
-document.getElementById("totalStudents").innerHTML =
-"⚠️ تأكدي إن الشيت متاح للجميع (Anyone with the link)";
-});
-
 </script>
-
-<div class="bottomButtons">
-
-<button class="navBtn"
-onclick="location.href='impect.html'">
-السابق
-</button>
-
-<button class="navBtn"
-onclick="location.href='index.html'">
-🏠
-</button>
-
-</div>
 
 </body>
 </html>
