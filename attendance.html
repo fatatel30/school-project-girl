@@ -132,10 +132,10 @@ cursor:pointer;
 
 </div>
 
-<!-- Firebase Script -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, update, increment } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDL5aF9Jos192Bb1lJq25xbTrF9EcZ-XSQ",
@@ -152,14 +152,12 @@ const db = getDatabase(app);
 
 let selected = null;
 
-/* عرض اسم الطالبة */
 window.onload = function(){
  let name = localStorage.getItem("studentName");
  document.getElementById("welcomeText").innerText =
  name ? "مرحبًا يا " + name + " 👋" : "مرحبًا بكِ 👋";
 }
 
-/* تسجيل الحضور في Firebase */
 window.selectStatus = function(element,type){
 
 document.querySelectorAll(".card")
@@ -173,19 +171,17 @@ if(!name) return;
 
 const studentRef = ref(db,"students/"+name);
 
-get(studentRef).then(snapshot=>{
+if(type==="present"){
+  update(studentRef,{ present: increment(1) });
+}
+if(type==="early"){
+  update(studentRef,{ early: increment(1) });
+}
+if(type==="late"){
+  update(studentRef,{ late: increment(1) });
+}
 
-let data = snapshot.val() || {present:0,early:0,late:0};
-
-if(type==="present") data.present++;
-if(type==="early") data.early++;
-if(type==="late") data.late++;
-
-set(studentRef,data);
-
-});
-
-/* الشارات (كما هي بدون تغيير) */
+/* الشارات كما هي */
 
 let totalDays=Number(localStorage.getItem("totalDays")||0);
 let earlyDays=Number(localStorage.getItem("earlyDays")||0);
@@ -221,7 +217,6 @@ document.getElementById("badgesSection").style.display="none";
 
 }
 
-/* التالي */
 window.goNext = function(){
 if(!selected){
 alert("اختاري حالة الحضور أولاً");
@@ -230,7 +225,6 @@ return;
 window.location.href="late-reason.html";
 }
 
-/* السابق */
 window.goBack = function(){
 window.location.href="intintion.html";
 }
