@@ -2,7 +2,9 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>إحصائيات الطالبات</title>
+
 <style>
 body{
 font-family:Tahoma;
@@ -10,14 +12,17 @@ background:linear-gradient(135deg,#5f1eb6,#1f3c88);
 color:white;
 text-align:center;
 padding:20px;
-padding-bottom:100px; /* عشان الأزرار متغطيش المحتوى */
+padding-bottom:100px;
+margin:0;
 }
+
 .card{
 background:rgba(255,255,255,0.1);
 margin:15px;
 padding:20px;
 border-radius:20px;
 }
+
 .box{
 display:inline-block;
 width:90px;
@@ -30,7 +35,6 @@ font-size:18px;
 color:white;
 }
 
-/* ===== الأزرار ===== */
 .buttons{
 position:fixed;
 bottom:0;
@@ -68,38 +72,37 @@ color:white;
 <h2>📊 إحصائيات الطالبات</h2>
 <div id="data"></div>
 
-<script>
-let url = "https://docs.google.com/spreadsheets/d/1T71_MTXMFzDj8g-BRrq6MxL44q7zZojxlfxbRuoQgyo/export?format=csv";
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-fetch(url)
-.then(res => res.text())
-.then(text => {
-  let rows = text.trim().split("\n").slice(1);
-  let students = {};
+const firebaseConfig = {
+  apiKey: "AIzaSyDL5aF9Jos192Bb1lJq25xbTrF9EcZ-XSQ",
+  authDomain: "school-project-girl.firebaseapp.com",
+  databaseURL: "https://school-project-girl-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "school-project-girl",
+  storageBucket: "school-project-girl.firebasestorage.app",
+  messagingSenderId: "60130160811",
+  appId: "1:60130160811:web:e37db48f546fa10895c7ee"
+};
 
-  rows.forEach(row => {
-    let cols = row.split(",");
-    let rawName = cols[1] || "";
-    let type = cols[2] || "";
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-    let name = rawName.trim().toLowerCase();
-    name = name.charAt(0).toUpperCase() + name.slice(1);
+const studentsRef = ref(db, "students");
 
-    if(!students[name]){
-      students[name] = {present:0, early:0, late:0};
-    }
+onValue(studentsRef, (snapshot) => {
+  const data = snapshot.val();
+  const container = document.getElementById("data");
+  container.innerHTML = "";
 
-    if(type.includes("حضور")) students[name].present++;
-    if(type.includes("مبكر")) students[name].early++;
-    if(type.includes("متأخر")) students[name].late++;
-  });
+  if(!data) return;
 
-  let container = document.getElementById("data");
+  for(let name in data){
+    let p = data[name].present || 0;
+    let e = data[name].early || 0;
+    let l = data[name].late || 0;
 
-  for(let name in students){
-    let p = students[name].present;
-    let e = students[name].early;
-    let l = students[name].late;
     let total = p + e + l;
     let percent = total === 0 ? 0 : Math.round(((p + e) / total) * 100);
     let badges = Math.floor(percent / 20);
