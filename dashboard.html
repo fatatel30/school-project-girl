@@ -96,7 +96,7 @@ onValue(studentsRef, (snapshot) => {
   for(let id in data){  
   
     let student = data[id];  
-    let name = student.name || "بدون اسم";  
+    let name = student.name ||" ";  
   
     let p = student.present || 0;  
     let e = student.early || 0;  
@@ -123,3 +123,4 @@ onValue(studentsRef, (snapshot) => {
   <a href="impect.html" class="btn prev">السابق</a>  
 </div>  </body>  
 </html> 
+
