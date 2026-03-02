@@ -1,308 +1,68 @@
-
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>إحصائيات</title>
-
+<title>إحصائيات الطالبات</title>
 <style>
 body{
-margin:0;
-padding-bottom:80px;
 font-family:Tahoma;
 background:linear-gradient(135deg,#5f1eb6,#1f3c88);
 color:white;
 text-align:center;
-font-weight:bold;
+padding:20px;
 }
-
-.container{padding:20px;}
-
-h1{color:#ffd700;}
-
-.subtitle{color:#ddd;margin-bottom:25px;}
-
-.studentBox{
+.card{
 background:rgba(255,255,255,0.1);
+margin:15px;
 padding:20px;
 border-radius:20px;
-margin-bottom:25px;
-text-align:right;
 }
-
-.cards{
-display:grid;
-grid-template-columns:1fr 1fr 1fr;
-gap:12px;
-margin-top:15px;
-}
-
-.card{
-padding:15px;
-border-radius:15px;
-background:linear-gradient(135deg,#6a2db5,#8a42d8);
-text-align:center;
-}
-
-.number{
-font-size:26px;
-margin:8px 0;
-}
-
-.progressBg{
-background:rgba(255,255,255,0.2);
-height:12px;
+.box{
+display:inline-block;
+width:90px;
+height:100px;
+margin:10px;
+background:linear-gradient(#a64bf4,#6a1bb9);
 border-radius:20px;
-margin-top:10px;
-overflow:hidden;
+padding-top:20px;
+font-size:18px;
+color:white;
 }
 
-.progress{
-height:100%;
-background:#f6b100;
-}
-
-.percent{
-margin-top:6px;
-font-size:14px;
-}
-
-/* ===== الأزرار السفلية ===== */
-
-.bottomButtons{
-position:fixed;
-bottom:0;
-right:0;
-left:0;
-background:rgba(0,0,0,0.3);
+/* ===== الأزرار ===== */
+.buttons{
+margin-top:40px;
 display:flex;
 justify-content:space-between;
-padding:12px 20px;
-backdrop-filter:blur(6px);
+align-items:center;
+padding:0 20px;
 }
 
-.navBtn{
-background:#ffd700;
-border:none;
-padding:12px 20px;
-border-radius:12px;
-font-size:16px;
-font-weight:bold;
-cursor:pointer;
-}
-
-.totalBox{
-background:rgba(255,255,255,0.15);
-padding:15px;
-border-radius:15px;
-margin-bottom:20px;
+.btn{
+padding:12px 25px;
+border-radius:30px;
 font-size:18px;
+font-weight:bold;
+text-decoration:none;
+}
+
+.home{
+background:#ffd700;
+color:black;
+}
+
+.prev{
+background:#8e44ad;
+color:white;
 }
 </style>
-   <!-- مكتبات Firebase الأساسية -->
-<script src="https://www.gstatic.com"></script>
-<script src="https://www.gstatic.com"></script>
-
-<script>
-// إعدادات مشروعك الخاصة (نفس التي في صفحة Login)
-const firebaseConfig = {
-  apiKey: "AIzaSyDL5aF9Jos192Bb1lJq25xbTrF9EcZ-XSQ",
-  authDomain: "school-project-girl.firebaseapp.com",
-  databaseURL: "https://school-project-girl-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "school-project-girl",
-  storageBucket: "school-project-girl.firebasestorage.app",
-  messagingSenderId: "60130160811",
-  appId: "1:60130160811:web:e37db48f546fa10895c7ee"
-};
-
-// تفعيل الفايربيز إذا لم يكن مفعلاً
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-const database = firebase.database();
-
-// وظيفة مساعدة لتنظيف الأسماء من الرموز الممنوعة في فايربيز
-function getSafeName() {
-    let name = localStorage.getItem("studentName") || "guest";
-    return name.replace(/[.#$\[\]]/g, "_");
-}
-</script>
-
 </head>
-
 <body>
 
-<div class="container">
-
-<h1>📊 لوحة الإحصائيات الشاملة</h1>
-<p class="subtitle">إحصائيات جميع الطالبات</p>
-
-<div id="totalStudents" class="totalBox">
-إجمالي التسجيلات: 0
-</div>
-
-<div id="studentsContainer"></div>
-
-</div>
+<h2>📊 إحصائيات الطالبات</h2>
+<div id="data"></div>
 
 <script>
-
-/* =========================
-   جلب جميع الطالبات
-========================= */
-
-let students =
-JSON.parse(localStorage.getItem("students")) || {};
-
-let container =
-document.getElementById("studentsContainer");
-
-/* إجمالي التسجيلات */
-document.getElementById("totalStudents").innerHTML =
-"إجمالي التسجيلات: " +
-Object.keys(students).length;
-
-
-/* لو لا توجد بيانات */
-if(Object.keys(students).length===0){
-container.innerHTML="<h3>لا توجد بيانات بعد</h3>";
-}
-
-
-/* =========================
-   إنشاء بطاقة لكل طالبة
-========================= */
-
-for(let name in students){
-
-let s = students[name];
-
-let present = s.present || 0;
-let early   = s.early || 0;
-let late    = s.late || 0;
-let badges  = s.badges || 0;
-
-let total = present + early + late;
-
-let percent = 0;
-
-if(total>0){
-percent =
-Math.round(((present+early)/total)*100);
-}
-
-container.innerHTML += `
-
-<div class="studentBox">
-
-<h2>${name}</h2>
-
-<div class="cards">
-
-<div class="card">
-<div class="number">${late}</div>
-متأخر
-</div>
-
-<div class="card">
-<div class="number">${early}</div>
-مبكر
-</div>
-
-<div class="card">
-<div class="number">${present+early}</div>
-حضور
-</div>
-<div class="card">
-   <div class="number">
-      <span id="studentsCount">0</span>
-   </div>
-   عدد الطالبات
- </div>
-<div class="percent">
-${percent}% نسبة الانضباط
-</div>
-
-<div class="progressBg">
-<div class="progress"
-style="width:${percent}%">
-</div>
-</div>
-
-<br>
-🎖️ الشارات: ${badges}
-
-</div>
-
-`;
-}
-
-</script>
-
-<!-- أزرار التنقل -->
-<div class="bottomButtons">
-
-<button class="navBtn"
-onclick="location.href='impect.html'">
-السابق
-</button>
-
-<button class="navBtn"
-onclick="location.href='index.html'">
-🏠
-</button>
-
-</div>
-
-   <div id="students"></div>
-
-<script>
-let url = "https://docs.google.com/spreadsheets/d/1T71_MTXMFzDj8g-BRrq6MxL44q7zZojxlfxbRuoQgyo/export?format=csv";
-
-fetch(url)
-.then(res => res.text())
-.then(data => {
-
-let rows = data.split("\n").slice(1);
-let result = {};
-
-rows.forEach(row => {
-    let cols = row.split(",");
-    let name = (cols[1] || "").trim().toLowerCase();
-    let status = cols[2] || "";
-
-    if(!name) return;
-
-    name = name.charAt(0).toUpperCase() + name.slice(1);
-
-    if(!result[name]){
-        result[name] = {present:0, early:0, late:0};
-    }
-
-    if(status.includes("حضور")) result[name].present++;
-    if(status.includes("مبكر")) result[name].early++;
-    if(status.includes("متأخر")) result[name].late++;
-});
-
-let container = document.getElementById("students");
-
-for(let name in result){
-    let s = result[name];
-
-    container.innerHTML += `
-        <div style="background:#6a1bb9;color:white;padding:15px;margin:15px;border-radius:15px;">
-            <h3>${name}</h3>
-            حضور: ${s.present} <br>
-            مبكر: ${s.early} <br>
-            متأخر: ${s.late}
-        </div>
-    `;
-}
-
-});
-</script>
-  <script>
 let url = "https://docs.google.com/spreadsheets/d/1T71_MTXMFzDj8g-BRrq6MxL44q7zZojxlfxbRuoQgyo/export?format=csv";
 
 fetch(url)
@@ -357,6 +117,6 @@ fetch(url)
   <a href="index.html" class="btn home">🏠 الصفحة الرئيسية</a>
   <a href="impect.html" class="btn prev">السابق</a>
 </div>
+
 </body>
 </html>
-
