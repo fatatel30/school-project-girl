@@ -98,10 +98,15 @@ onValue(studentsRef, (snapshot) => {
 
   if(!data) return;
 
-  for(let name in data){
-    let p = data[name].present || 0;
-    let e = data[name].early || 0;
-    let l = data[name].late || 0;
+  // ✅ هنا التعديل المهم
+  for(let id in data){
+
+    let student = data[id];
+    let name = student.name || "بدون اسم";
+
+    let p = student.present || 0;
+    let e = student.early || 0;
+    let l = student.late || 0;
 
     let total = p + e + l;
     let percent = total === 0 ? 0 : Math.round(((p + e) / total) * 100);
