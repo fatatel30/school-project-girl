@@ -98,11 +98,9 @@ onValue(studentsRef, (snapshot) => {
 
   if(!data) return;
 
-  // ✅ هنا التعديل المهم
-  for(let id in data){
+  for(let name in data){
 
-    let student = data[id];
-    let name = student.name || "بدون اسم";
+    let student = data[name];
 
     let p = student.present || 0;
     let e = student.early || 0;
