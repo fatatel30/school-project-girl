@@ -8,13 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Cairo', sans-serif;
-}
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo', sans-serif;}
 body{
 min-height:100vh;
 background:linear-gradient(135deg,#5b21b6,#1e3a8a);
@@ -24,41 +18,12 @@ align-items:flex-start;
 padding-top:40px;
 color:white;
 }
-
-.container{
-width:100%;
-max-width:420px;
-text-align:center;
-padding:0 20px;
-}
-
-.icon{
-font-size:45px;
-margin-bottom:10px;
-}
-
-h1{
-color:#facc15;
-margin-bottom:5px;
-}
-
-.subtitle{
-opacity:.9;
-margin-bottom:20px;
-}
-
-.status-title{
-margin:20px 0;
-font-size:18px;
-}
-
-.options{
-display:flex;
-justify-content:space-between;
-gap:10px;
-margin-bottom:20px;
-}
-
+.container{width:100%;max-width:420px;text-align:center;padding:0 20px;}
+.icon{font-size:45px;margin-bottom:10px;}
+h1{color:#facc15;margin-bottom:5px;}
+.subtitle{opacity:.9;margin-bottom:20px;}
+.status-title{margin:20px 0;font-size:18px;}
+.options{display:flex;justify-content:space-between;gap:10px;margin-bottom:20px;}
 .card{
 flex:1;
 background:rgba(255,255,255,0.08);
@@ -67,39 +32,23 @@ border-radius:18px;
 cursor:pointer;
 transition:.3s;
 }
-
 .card.active{
 background:linear-gradient(135deg,#3b82f6,#2563eb);
 box-shadow:0 0 20px #60a5fa;
 transform:scale(1.05);
 }
-
-.card .emoji{
-font-size:35px;
-margin-bottom:8px;
-}
-
-.card span{
-display:block;
-font-size:15px;
-}
-
+.card .emoji{font-size:35px;margin-bottom:8px;}
+.card span{display:block;font-size:15px;}
 .late{color:#facc15;}
 .present{color:#86efac;}
 .early{color:#fde047;}
-
-.badge-message{
-display:none;
-margin:15px 0;
-}
-
+.badge-message{display:none;margin:15px 0;}
 .badge-message span{
 background:#22c55e;
 padding:10px 20px;
 border-radius:25px;
 font-weight:bold;
 }
-
 .badges{
 display:none;
 background:rgba(255,255,255,0.1);
@@ -107,20 +56,13 @@ padding:20px;
 border-radius:20px;
 margin:15px 0;
 }
-
 .badge-item{
 background:#6b21a8;
 padding:12px;
 border-radius:15px;
 margin-bottom:10px;
 }
-
-.nav{
-display:flex;
-justify-content:space-between;
-margin-top:20px;
-}
-
+.nav{display:flex;justify-content:space-between;margin-top:20px;}
 .next{
 background:#facc15;
 color:#4b0082;
@@ -130,7 +72,6 @@ border-radius:25px;
 font-weight:bold;
 cursor:pointer;
 }
-
 .back{
 background:#9333ea;
 color:white;
@@ -178,14 +119,12 @@ cursor:pointer;
 
 <div class="badges" id="badgesSection">
 <h3>🏅 الشارات المتاحة</h3>
-
 <div class="badge-item">⭐ نجمة الأسبوع</div>
 <div class="badge-item">👑 ملكة الأسبوع</div>
 <div class="badge-item">🌅 صاحبة البكور</div>
 <div class="badge-item">🏆 بطلة رمضان</div>
 </div>
 
-<!-- ✅ تم فقط عكس ترتيب الأزرار -->
 <div class="nav">
 <button class="back" onclick="goBack()">السابق</button>
 <button class="next" onclick="goNext()">التالي</button>
@@ -193,43 +132,60 @@ cursor:pointer;
 
 </div>
 
-<script>
+<!-- Firebase Script -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-let selected=null;
+const firebaseConfig = {
+  apiKey: "AIzaSyDL5aF9Jos192Bb1lJq25xbTrF9EcZ-XSQ",
+  authDomain: "school-project-girl.firebaseapp.com",
+  databaseURL: "https://school-project-girl-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "school-project-girl",
+  storageBucket: "school-project-girl.firebasestorage.app",
+  messagingSenderId: "60130160811",
+  appId: "1:60130160811:web:e37db48f546fa10895c7ee"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+let selected = null;
 
 /* عرض اسم الطالبة */
-window.onload=function(){
-
+window.onload = function(){
  let name = localStorage.getItem("studentName");
-
-document.getElementById("welcomeText").innerText=name?"مرحبًا يا "+name+" 👋":"مرحبًا بكِ 👋";
+ document.getElementById("welcomeText").innerText =
+ name ? "مرحبًا يا " + name + " 👋" : "مرحبًا بكِ 👋";
 }
 
-/* تسجيل الحضور وربطه بالـ Dashboard */
-function selectStatus(element,type){
+/* تسجيل الحضور في Firebase */
+window.selectStatus = function(element,type){
 
 document.querySelectorAll(".card")
 .forEach(card=>card.classList.remove("active"));
 
 element.classList.add("active");
+selected = type;
 
-selected=type;
+let name = localStorage.getItem("studentName");
+if(!name) return;
 
-/* بيانات dashboard */
+const studentRef = ref(db,"students/"+name);
 
-let present=parseInt(localStorage.getItem("present"))||0;
-let early=parseInt(localStorage.getItem("early"))||0;
-let late=parseInt(localStorage.getItem("late"))||0;
+get(studentRef).then(snapshot=>{
 
-if(type==="present") present++;
-if(type==="early") early++;
-if(type==="late") late++;
+let data = snapshot.val() || {present:0,early:0,late:0};
 
-localStorage.setItem("present",present);
-localStorage.setItem("early",early);
-localStorage.setItem("late",late);
+if(type==="present") data.present++;
+if(type==="early") data.early++;
+if(type==="late") data.late++;
 
-/* بيانات الشارات */
+set(studentRef,data);
+
+});
+
+/* الشارات (كما هي بدون تغيير) */
 
 let totalDays=Number(localStorage.getItem("totalDays")||0);
 let earlyDays=Number(localStorage.getItem("earlyDays")||0);
@@ -255,8 +211,6 @@ localStorage.setItem("earlyDays",earlyDays);
 localStorage.setItem("streak",streak);
 localStorage.setItem("badges",badges);
 
-/* إظهار الشارات */
-
 if(type!=="late"){
 document.getElementById("badgeMessage").style.display="block";
 document.getElementById("badgesSection").style.display="block";
@@ -268,21 +222,18 @@ document.getElementById("badgesSection").style.display="none";
 }
 
 /* التالي */
-function goNext(){
-
+window.goNext = function(){
 if(!selected){
 alert("اختاري حالة الحضور أولاً");
 return;
 }
-
 window.location.href="late-reason.html";
 }
 
 /* السابق */
-function goBack(){
+window.goBack = function(){
 window.location.href="intintion.html";
 }
-localStorage.setItem("attendanceDays", attendanceDays);
 </script>
 
 </body>
