@@ -28,6 +28,31 @@ padding-top:20px;
 font-size:18px;
 color:white;
 }
+
+/* ===== الأزرار ===== */
+.buttons{
+margin-top:40px;
+}
+
+.btn{
+display:inline-block;
+padding:12px 25px;
+margin:10px;
+border-radius:30px;
+font-size:18px;
+font-weight:bold;
+text-decoration:none;
+color:white;
+}
+
+.home{
+background:#ffd700;
+color:black;
+}
+
+.prev{
+background:#8e44ad;
+}
 </style>
 </head>
 <body>
@@ -41,7 +66,7 @@ let url = "https://docs.google.com/spreadsheets/d/1T71_MTXMFzDj8g-BRrq6MxL44q7zZ
 fetch(url)
 .then(res => res.text())
 .then(text => {
-  let rows = text.trim().split("\n").slice(1); // نتخطى رأس الجدول
+  let rows = text.trim().split("\n").slice(1);
   let students = {};
 
   rows.forEach(row => {
@@ -49,7 +74,6 @@ fetch(url)
     let rawName = cols[1] || "";
     let type = cols[2] || "";
 
-    // تنظيف الاسم
     let name = rawName.trim().toLowerCase();
     name = name.charAt(0).toUpperCase() + name.slice(1);
 
@@ -85,6 +109,12 @@ fetch(url)
   }
 });
 </script>
+
+<!-- ===== الأزرار المضافة ===== -->
+<div class="buttons">
+  <a href="index.html" class="btn home">🏠 الصفحة الرئيسية</a>
+  <a href="impect.html" class="btn prev">السابق</a>
+</div>
 
 </body>
 </html>
